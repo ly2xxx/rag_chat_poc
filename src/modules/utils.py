@@ -5,6 +5,7 @@ import pdfplumber
 
 from modules.chatbot import Chatbot
 from modules.embedder import Embedder
+from langchain.document_loaders.sitemap import SitemapLoader
 
 class Utilities:
 
@@ -80,6 +81,26 @@ class Utilities:
             st.session_state["reset_chat"] = True
 
         #print(uploaded_file)
+        return uploaded_file
+    
+    @staticmethod
+    def handle_webload(url):
+        """
+        Handles and display uploaded_file
+        :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
+        """
+        # uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
+        uploaded_file = None
+        if url is not None:
+            sitemap_loader = SitemapLoader(web_path=url,      
+                # filter_urls=filter_urls
+            )
+            uploaded_file = sitemap_loader.load()
+
+        else:
+            st.session_state["reset_chat"] = True
+
+        print(uploaded_file)
         return uploaded_file
 
     @staticmethod
