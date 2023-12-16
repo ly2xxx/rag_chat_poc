@@ -22,7 +22,7 @@ class Sidebar:
         """
         st.markdown(paypal_button_code, unsafe_allow_html=True)
         st.write(
-        "👆 *Support a tool that helps you get stuff done. Your donation fuels our imporvements*"
+        "👆 *Support a tool that helps you get stuff done. Your donation fuels our improvements*"
         )
 
     @staticmethod
