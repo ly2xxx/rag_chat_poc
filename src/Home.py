@@ -1,4 +1,5 @@
 import streamlit as st
+from st_pages import hide_pages, show_pages_from_config, add_page_title
 
 def paypal_donation_button():
     paypal_button_code = """
@@ -14,9 +15,12 @@ def paypal_donation_button():
 
     st.markdown(paypal_button_code, unsafe_allow_html=True)
 
+add_page_title()
+show_pages_from_config()
+hide_pages(["down"])
 
 #Config
-st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
+# st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
 
 
 #Contact

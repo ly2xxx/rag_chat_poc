@@ -9,10 +9,11 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain.chains import AnalyzeDocumentChain
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain.llms import OpenAI
-import os
 from langchain.text_splitter import CharacterTextSplitter
+from st_pages import hide_pages
 
-st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
+# st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
+hide_pages(["down"])
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()

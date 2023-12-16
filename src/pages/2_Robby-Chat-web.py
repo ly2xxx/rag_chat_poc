@@ -10,7 +10,7 @@ from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from urllib.parse import urlparse
 from datetime import datetime
-
+from st_pages import hide_pages
 
 #To be able to update the changes made to modules in localhost (press r)
 def reload_module(module_name):
@@ -44,6 +44,7 @@ def generate_filename(url):
     
     return filename
 
+hide_pages(["down"])
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
 utils_module = reload_module('modules.utils')
@@ -53,8 +54,6 @@ ChatHistory = history_module.ChatHistory
 Layout = layout_module.Layout
 Utilities = utils_module.Utilities
 Sidebar = sidebar_module.Sidebar
-
-st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()

@@ -1,0 +1,23 @@
+[[pages]]
+path = "src/Home.py"
+name = "Home"
+icon = "🏠"
+
+[[pages]]
+path = "src/pages/1_Robby-Chat-file.py"
+name = "Robby-Chat-file"
+icon = "📄"
+
+[[pages]]
+path = "src/pages/2_Robby-Chat-web.py"
+name = "Robby-Chat-web"
+icon = "🌐"
+
+[[pages]]
+path = "src/pages/3_Robby-Youtube.py"
+name = "Robby-Summary-youtube"
+icon = "🎬"
+
+[[pages]]
+path = "src/pages/download.py"
+name = "down"
