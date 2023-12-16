@@ -8,7 +8,7 @@ class Layout:
         """
         st.markdown(
             f"""
-            <h1 style='text-align: center;'> Ask Robby about your {types_files} files ! 😁</h1>
+            <h1 style='text-align: center;'> Ask Robby about your {types_files} ! 😁</h1>
             """,
             unsafe_allow_html=True,
         )
@@ -41,4 +41,5 @@ class Layout:
             
             is_ready = submit_button and user_input
         return is_ready, user_input
+
     

@@ -69,3 +69,4 @@ else:
             answer = summarize_document_chain.run(chunks)
 
             st.subheader(answer)
+            sidebar.donation()

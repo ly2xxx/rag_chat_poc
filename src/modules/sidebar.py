@@ -9,6 +9,23 @@ class Sidebar:
     TEMPERATURE_STEP = 0.01
 
     @staticmethod
+    def donation():
+        paypal_button_code = """
+        <form action="https://www.paypal.com/donate" method="post" target="_blank">
+        <input type="hidden" name="business" value="J74C4FTELMRT4" />
+        <input type="hidden" name="no_recurring" value="0" />
+        <input type="hidden" name="item_name" value="Support us! Your donation powers our content, and we'll share the code with you as a thank-you." />
+        <input type="hidden" name="currency_code" value="GBP" />
+        <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+        <img alt="" border="0" src="https://www.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1" />
+        </form>
+        """
+        st.markdown(paypal_button_code, unsafe_allow_html=True)
+        st.write(
+        "👆 *Support a tool that helps you get stuff done. Your donation fuels our imporvements*"
+        )
+
+    @staticmethod
     def about():
         about = st.sidebar.expander("🧠 About Robby ")
         sections = [
