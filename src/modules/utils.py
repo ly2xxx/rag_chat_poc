@@ -28,7 +28,7 @@ class Utilities:
                 st.sidebar.success("API key loaded from previous input", icon="🚀")
             else:
                 user_api_key = st.sidebar.text_input(
-                    label="#### Your OpenAI API key 👇", placeholder="sk-...", type="password"
+                    label="#### Your OpenAI API key👇\n(Don't worry, we don't store your key ever !)", placeholder="sk-...", type="password"
                 )
                 if user_api_key:
                     st.session_state.api_key = user_api_key
@@ -42,6 +42,7 @@ class Utilities:
         Handles and display uploaded_file
         :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
         """
+        st.sidebar.markdown("#### Your file👇\n(Don't worry, we don't store your file !)")
         uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
         if uploaded_file is not None:
 
