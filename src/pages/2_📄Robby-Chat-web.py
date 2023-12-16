@@ -1,4 +1,5 @@
 import os
+import hashlib
 import streamlit as st
 from io import StringIO
 import re
@@ -7,6 +8,9 @@ from modules.history import ChatHistory
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
+from urllib.parse import urlparse
+from datetime import datetime
+
 
 #To be able to update the changes made to modules in localhost (press r)
 def reload_module(module_name):
@@ -15,6 +19,30 @@ def reload_module(module_name):
     if module_name in sys.modules:
         importlib.reload(sys.modules[module_name])
     return sys.modules[module_name]
+
+def generate_filename(url):
+    # Parse the URL to extract the domain
+    domain = urlparse(url).hostname
+    
+    # # Format the current date and time as specified
+    # current_datetime = datetime.now().strftime("%d%m%Y.%H.%M.%S")
+
+    # Extract the last part of the URL as the filename
+    path_segments = urlparse(url).path.split('/')
+    last_part = path_segments[-1] if path_segments[-1] else path_segments[-2]  # Use the last non-empty segment
+    
+    # Generate an MD5 hash for long filenames
+    if len(last_part) > 30:
+        hash_object = hashlib.md5(last_part.encode())
+        last_part = hash_object.hexdigest()
+    
+    # Format the current date
+    current_date = datetime.now().strftime("%d%m%Y")
+    
+    # Concatenate the parts to create the filename
+    filename = f"{domain}.{last_part}.{current_date}"
+    
+    return filename
 
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
@@ -42,9 +70,9 @@ else:
 
     web_url = st.text_input(placeholder="Enter Website URL", label_visibility="hidden", label =" ")
     if len(web_url) > 0:
-        uploaded_file = utils.handle_webload(web_url)
+        web_context = utils.handle_webload(web_url)
 
-        if uploaded_file:
+        if web_context:
 
             # Configure the sidebar
             sidebar.show_options()
@@ -53,8 +81,10 @@ else:
             # Initialize chat history
             history = ChatHistory()
             try:
+                uploaded_file = StringIO(web_context)
+                uploaded_file.name = generate_filename(web_url)+str(len(web_context))+".txt"
                 chatbot = utils.setup_chatbot(
-                    web_url, st.session_state["model"], st.session_state["temperature"]
+                    uploaded_file, st.session_state["model"], st.session_state["temperature"]
                 )
                 st.session_state["chatbot"] = chatbot
 

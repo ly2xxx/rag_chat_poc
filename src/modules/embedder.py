@@ -26,8 +26,13 @@ class Embedder:
         Stores document embeddings using Langchain and FAISS
         """
         with tempfile.NamedTemporaryFile(mode="wb", delete=False) as tmp_file:
-            tmp_file.write(file)
+            try:
+                tmp_file.write(file)
+            except Exception as e:
+                # print(f"Warning reading file: {e}")
+                tmp_file.write(file.encode('utf-8'))
             tmp_file_path = tmp_file.name
+            
             
         def get_file_extension(uploaded_file):
             file_extension =  os.path.splitext(uploaded_file)[1].lower()

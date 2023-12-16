@@ -5,7 +5,8 @@ import pdfplumber
 
 from modules.chatbot import Chatbot
 from modules.embedder import Embedder
-from langchain.document_loaders.sitemap import SitemapLoader
+import requests
+from bs4 import BeautifulSoup
 
 class Utilities:
 
@@ -85,23 +86,34 @@ class Utilities:
     
     @staticmethod
     def handle_webload(url):
-        """
-        Handles and display uploaded_file
-        :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
-        """
-        # uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
-        uploaded_file = None
-        if url is not None:
-            sitemap_loader = SitemapLoader(web_path=url,      
-                # filter_urls=filter_urls
-            )
-            uploaded_file = sitemap_loader.load()
+            """
+            Handles and displays content from a web page
+            :param url: URL of the web page to load
+            :return: Text content of the web page
+            """
+            try:
+                # Send a GET request to the URL
+                response = requests.get(url)
+                response.raise_for_status()  # Raise an exception for bad responses
 
-        else:
-            st.session_state["reset_chat"] = True
+                # Use BeautifulSoup to parse the HTML content
+                soup = BeautifulSoup(response.text, 'html.parser')
 
-        print(uploaded_file)
-        return uploaded_file
+                # Extract text content from the HTML
+                text_content = soup.get_text(separator='\n', strip=True)
+
+                # Output the text content
+                # print(text_content)
+                file_container = st.expander("Your web page:")
+                # uploaded_file.seek(0)
+                # content = uploaded_file.read().decode("utf-8")
+                file_container.write(text_content)
+
+                return text_content
+
+            except Exception as e:
+                print(f"Error loading web page: {e}")
+                return None
 
     @staticmethod
     def setup_chatbot(uploaded_file, model, temperature):
