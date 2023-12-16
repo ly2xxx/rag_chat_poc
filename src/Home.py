@@ -33,21 +33,30 @@ st.markdown("---")
 st.markdown(
     """ 
     <h5 style='text-align:center;'>I'm Robby, an intelligent chatbot created by combining 
-    the strengths of Langchain and Streamlit. I use large language models to provide
-    context-sensitive interactions. My goal is to help you better understand your data.
-    I support PDF, TXT, CSV, Youtube transcript 🧠</h5>
+    the strengths of VectorDB, Langchain and Streamlit. I use large language models (LLM) to provide
+    context-sensitive interactions. 🧠</h5>
+    <h8>
+    🚀 Make the most of your OpenAI API credits and unlock insights from your data with my help. I can parse PDFs, TXT, CSVs, websites, and even YouTube transcripts like a pro, so let's get analyzing! 
+    </h8>
+    <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
     unsafe_allow_html=True)
 st.markdown("---")
 
 
 #Robby's Pages
-st.subheader("🚀 Robby's Pages")
+st.subheader("⬅️☜ Robby's Pages")
 st.write("""
 - **Robby-Chat-file**: General Chat on data (PDF, TXT,CSV) with a [vectorstore](https://github.com/facebookresearch/faiss) (index useful parts(max 4) for respond to the user) | works with [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)
 - **Robby-Chat-web**: General Chat about given website with [langchain-Sitemaploader](https://python.langchain.com/docs/integrations/document_loaders/sitemap) stored in a [vectorstore](https://github.com/facebookresearch/faiss) (index useful parts(max 4) for respond to the user) | works with [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)
 - **Robby-Youtube**: Summarize YouTube videos with [summarize-chain](https://python.langchain.com/en/latest/modules/chains/index_examples/summarize.html)         
 """)
+# st.markdown("""
+# - **Robby-Chat-file**: General Chat on data (PDF, TXT, CSV) with a <a href="https://github.com/facebookresearch/faiss" target="_blank">vectorstore</a> (index useful parts (max 4) for responding to the user) | works with <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html" target="_blank">ConversationalRetrievalChain</a>
+# - **Robby-Chat-web**: General Chat about a given website with <a href="https://python.langchain.com/docs/integrations/document_loaders/sitemap" target="_blank">langchain-Sitemaploader</a> stored in a <a href="https://github.com/facebookresearch/faiss" target="_blank">vectorstore</a> (index useful parts (max 4) for responding to the user) | works with <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html" target="_blank">ConversationalRetrievalChain</a>
+# - **Robby-Youtube**: Summarize YouTube videos with <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/summarize.html" target="_blank">summarize-chain</a>
+# """)
+
 st.markdown("---")
 
 # - **Robby-Sheet** (beta): Chat on tabular data (CSV) | for precise information | process the whole file | works with [CSV_Agent](https://python.langchain.com/en/latest/modules/agents/toolkits/examples/csv.html) + [PandasAI](https://github.com/gventuri/pandas-ai) for data manipulation and graph creation
