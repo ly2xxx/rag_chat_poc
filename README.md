@@ -1,7 +1,7 @@
 # rag_chat_poc
 Experimented with Retrieval Augmented Generation based on given documents
 
-### An AI chatbot featuring conversational memory, designed to enable users to discuss their CSV, PDF, TXT data and YTB videos in a more intuitive manner. 🚀
+### An AI chatbot featuring conversational memory, designed to enable users to discuss their CSV, PDF, TXT data, Website page and YTB videos in a more intuitive manner. 🚀
 ![Robby](demo-pic.jpg)
 Robby the Robot from [Forbidden Planet](https://youtu.be/bflfQN_YsTM)
 
@@ -16,13 +16,13 @@ Follow these steps to set up and run the service locally :
 
 ### Installation
 Clone the repository :
-
-`git clone https://github.com/yvann-hub/Robby-chatbot.git`
+`git clone https://github.com/ly2xxx/rag_chat_poc.git`
+(original template app `git clone https://github.com/yvann-hub/Robby-chatbot.git`)
 
 
 Navigate to the project directory :
 
-`cd Robby-chatbot`
+`cd rag_chat_poc`
 
 
 Create a virtual environment :
@@ -38,6 +38,6 @@ Install the required dependencies in the virtual environment :
 
 Launch the chat service locally :
 
-`streamlit run src/Home.py`
+`streamlit run streamlit_app.py`
 
 #### That's it! The service is now up and running locally. 🤗
