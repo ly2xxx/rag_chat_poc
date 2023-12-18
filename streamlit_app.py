@@ -1,5 +1,7 @@
 import streamlit as st
 from st_pages import hide_pages, show_pages_from_config, add_page_title
+from PIL import Image
+import os
 
 def paypal_donation_button():
     paypal_button_code = """
@@ -89,6 +91,37 @@ st.markdown("---")
 
 # Add PayPal donation button
 paypal_donation_button()
+
+st.markdown("---")
+
+def generate_thumbnail(image_path, thumbnail_size=(100, 100)):
+    original_image = Image.open(image_path)
+    thumbnail = original_image.resize(thumbnail_size)
+    return thumbnail
+
+# Specify the directory path containing image files
+directory_path = "Gallery/"
+
+# Get a list of image files in the directory
+image_files = [file for file in os.listdir(directory_path) if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+
+# Display thumbnails
+for image_file in image_files:
+    image_path = os.path.join(directory_path, image_file)
+    st.image(image_path)
+    
+hide_img_fs = '''
+<style>
+button[title="View fullscreen"]{
+    visibility: hidden;}
+</style>
+'''
+
+st.markdown(hide_img_fs, unsafe_allow_html=True)
+    # thumbnail = generate_thumbnail(image_path)
+
+    # st.image(thumbnail, caption=image_file, use_column_width=True)
+
 
 # - **Robby-Sheet** (beta): Chat on tabular data (CSV) | for precise information | process the whole file | works with [CSV_Agent](https://python.langchain.com/en/latest/modules/agents/toolkits/examples/csv.html) + [PandasAI](https://github.com/gventuri/pandas-ai) for data manipulation and graph creation
 # - **Robby-Youtube**: Summarize YouTube videos with [summarize-chain](https://python.langchain.com/en/latest/modules/chains/index_examples/summarize.html)
