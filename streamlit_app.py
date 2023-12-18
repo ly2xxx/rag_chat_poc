@@ -110,14 +110,14 @@ for image_file in image_files:
     image_path = os.path.join(directory_path, image_file)
     st.image(image_path)
     
-hide_img_fs = '''
-<style>
-button[title="View fullscreen"]{
-    visibility: hidden;}
-</style>
-'''
+# hide_img_fs = '''
+# <style>
+# button[title="View fullscreen"]{
+#     visibility: hidden;}
+# </style>
+# '''
 
-st.markdown(hide_img_fs, unsafe_allow_html=True)
+# st.markdown(hide_img_fs, unsafe_allow_html=True)
     # thumbnail = generate_thumbnail(image_path)
 
     # st.image(thumbnail, caption=image_file, use_column_width=True)
