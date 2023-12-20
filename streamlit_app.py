@@ -22,12 +22,12 @@ show_pages_from_config()
 
 show_pages(
     [
-        Page("streamlit_app.py", "Home", "🏠"),
+        Page("./streamlit_app.py", "Home", "🏠"),
         # Can use :<icon-name>: or the actual icon
-        Page("pages/1_Robby-Chat-file.py", "Robby-Chat-file", "📄"),
-        Page("pages/2_Robby-Chat-web.py", "Robby-Chat-web", "🌐"),
-        Page("pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
-        Page("pages/download.py", "down", "⤓"),
+        Page("./pages/1_Robby-Chat-file.py", "Robby-Chat-file", "📄"),
+        Page("./pages/2_Robby-Chat-web.py", "Robby-Chat-web", "🌐"),
+        Page("./pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
+        Page("./pages/download.py", "down", "⤓"),
     ]
 )
 
