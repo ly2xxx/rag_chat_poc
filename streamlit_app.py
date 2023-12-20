@@ -1,5 +1,5 @@
 import streamlit as st
-from st_pages import hide_pages, show_pages_from_config, add_page_title
+from st_pages import hide_pages, show_pages_from_config, add_page_title, show_pages, Page
 from PIL import Image
 import os
 
@@ -19,6 +19,18 @@ def paypal_donation_button():
 
 add_page_title()
 show_pages_from_config()
+
+show_pages(
+    [
+        Page("streamlit_app.py", "Home", "🏠"),
+        # Can use :<icon-name>: or the actual icon
+        Page("pages/1_Robby-Chat-file.py", "Robby-Chat-file", "📄"),
+        Page("pages/2_Robby-Chat-web.py", "Robby-Chat-web", "🌐"),
+        Page("pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
+        Page("pages/download.py", "down", "⤓"),
+    ]
+)
+
 hide_pages(["down"])
 
 #Config
