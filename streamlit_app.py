@@ -3,6 +3,7 @@ from st_pages import hide_pages, show_pages_from_config, add_page_title, show_pa
 from PIL import Image
 import os
 
+
 def paypal_donation_button():
     paypal_button_code = """
     <form action="https://www.paypal.com/donate" method="post" target="_blank">
@@ -72,9 +73,49 @@ st.markdown("---")
 
 
 #Description
+typing_script = """
+<style>
+    #typed-text {
+        overflow: hidden;
+        white-space: nowrap; /* Set to nowrap to prevent line breaks */
+        border-right: .15em solid orange;
+        font-size: 13px; /* Adjust font size as needed */
+        margin: 0 auto;
+        letter-spacing: .15em;
+        animation: typing 6s steps(100, end), blink-caret .5s step-end infinite; /* Adjust timing and steps */
+    }
+
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: orange; }
+    }
+</style>
+
+<div id="typed-text">Ever felt like you've wasted hours of time wading through documents on the internet?</div>
+
+<script>
+    // Function to remove animation after completion
+    function removeAnimation() {
+        document.getElementById("typed-text").style.animation = "none";
+    }
+
+    // Call the removeAnimation function after the animation completes
+    document.getElementById("typed-text").addEventListener("animationend", removeAnimation);
+</script>
+"""
+
+st.markdown(typing_script, unsafe_allow_html=True)
 st.markdown(
     """ 
-    <h5 style='text-align:center;'>I'm Robby, an intelligent chatbot created by combining 
+    <h9 style='text-align:left;'>- What if..you had a tireless personal assistant that could pre-analyze all your documents, websites, and videos, highlighting the parts that are most relevant to your needs?</h9>
+    <br/>
+    <h9 style='text-align:left;'>- So that, this digital assistant could be your secret weapon for staying on top of your workload and staying informed, saving you time and effort by identifying the most important information for you.</h9>
+    <h5 style='text-align:center;'>I'm Robby, an intelligent chatbot created for exactly this purpose, by combining 
     the strengths of VectorDB, Langchain and Streamlit. I use large language models (LLM) to provide
     context-sensitive interactions. 🧠</h5>
     <h8>
