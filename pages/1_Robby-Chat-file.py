@@ -40,7 +40,7 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-    uploaded_file = utils.handle_upload(["pdf", "txt", "csv"])
+    uploaded_file = utils.handle_upload(["pdf", "txt", "csv", "zip"])
 
     if uploaded_file:
 
