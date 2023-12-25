@@ -1,4 +1,5 @@
 import streamlit as st
+import base64
 
 class Sidebar:
 
@@ -65,5 +66,14 @@ class Sidebar:
             self.temperature_slider()
             st.session_state.setdefault("model", self.MODEL_OPTIONS[0])
             st.session_state.setdefault("temperature", self.TEMPERATURE_DEFAULT_VALUE)
+
+    def download_model(self, vectormodel):
+        with open(vectormodel, 'rb') as f:
+            bytes = f.read()
+            b64 = base64.b64encode(bytes).decode()
+            href = f'<a href="data:file/pkl;base64,{b64}" download=\'{vectormodel}\'>\
+                Download Trained Model .pkl\
+            </a> <span style="color:green; font-weight:bold;">(Combine multiple .pkl files into a .zip for deeper AI analysis later)</span>'
+            st.markdown(href, unsafe_allow_html=True)
 
     

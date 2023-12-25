@@ -86,6 +86,7 @@ else:
                     uploaded_file, st.session_state["model"], st.session_state["temperature"]
                 )
                 st.session_state["chatbot"] = chatbot
+                sidebar.download_model(st.session_state["vectordb"])
 
                 if st.session_state["ready"]:
                     # Create containers for chat responses and user prompts

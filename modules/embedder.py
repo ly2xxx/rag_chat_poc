@@ -9,6 +9,7 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import zipfile
 import io
+import streamlit as st
 
 class Embedder:
 
@@ -131,11 +132,14 @@ class Embedder:
         """
         Retrieves document embeddings
         """
-        if not os.path.isfile(f"{self.PATH}/{original_filename}.pkl"):
+        vector_file_name = f"{self.PATH}/{original_filename}.pkl"
+
+        if not os.path.isfile(vector_file_name):
             self.storeDocEmbeds(file, original_filename)
 
         # Load the vectors from the pickle file
-        with open(f"{self.PATH}/{original_filename}.pkl", "rb") as f:
+        with open(vector_file_name, "rb") as f:
             vectors = pickle.load(f)
+            st.session_state["vectordb"]=vector_file_name
         
         return vectors
