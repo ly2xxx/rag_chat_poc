@@ -32,7 +32,7 @@ class Embedder:
 
         # Step 2: Iterate through .pkl files and read into a FAISS 'vectors' variable
         vectors = None
-
+        loaded_vectors = None
         for root, dirs, files in os.walk(extracted_dir):
             for file in files:
                 if file.endswith('.pkl'):
@@ -41,12 +41,19 @@ class Embedder:
                     # Load vectors from the pickle file
                     with open(pkl_file_path, 'rb') as f:
                         loaded_vectors = pickle.load(f)
+                else:
+                    file_path = os.path.join(root, file)
 
-                    # Assuming 'vectors' is a FAISS Index, merge the loaded vectors
-                    if vectors is None:
-                        vectors = loaded_vectors
-                    else:
-                        vectors.merge_from(loaded_vectors)
+                    # Load vectors from the embedding
+                    with open(file_path, 'rb') as f:
+                        f.seek(0)
+                        loaded_vectors = self.generateEmbeddingsFromFile(f.read(), self.get_file_extension(file))
+
+                # Assuming 'vectors' is a FAISS Index, merge the loaded vectors
+                if vectors is None:
+                    vectors = loaded_vectors
+                else:
+                    vectors.merge_from(loaded_vectors)
 
         # Clean up: Remove the temporary directory and its contents
         if os.path.exists(extracted_dir):
@@ -61,11 +68,30 @@ class Embedder:
 
         # Now 'vectors' contains all the loaded vectors from the .pkl files
         return vectors
+    
+    def get_file_extension(self, uploaded_file):
+            file_extension =  os.path.splitext(uploaded_file)[1].lower()
+            
+            return file_extension
 
     def storeDocEmbeds(self, file, original_filename):
         """
         Stores document embeddings using Langchain and FAISS
-        """
+        """ 
+        
+        file_extension = self.get_file_extension(original_filename)
+
+        vectors = None
+        if file_extension == ".zip":
+            vectors = self.readVectorsFromZip(io.BytesIO(file), original_filename)
+        else:
+            vectors = self.generateEmbeddingsFromFile(file, file_extension)
+
+        # Save the vectors to a pickle file
+        with open(f"{self.PATH}/{original_filename}.pkl", "wb") as f:
+            pickle.dump(vectors, f)
+
+    def generateEmbeddingsFromFile(self, file, file_extension):
         with tempfile.NamedTemporaryFile(mode="wb", delete=False) as tmp_file:
             try:
                 tmp_file.write(file)
@@ -73,47 +99,32 @@ class Embedder:
                 # print(f"Warning reading file: {e}")
                 tmp_file.write(file.encode('utf-8'))
             tmp_file_path = tmp_file.name
-            
-            
-        def get_file_extension(uploaded_file):
-            file_extension =  os.path.splitext(uploaded_file)[1].lower()
-            
-            return file_extension
-        
+
         text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size = 2000,
                 chunk_overlap  = 100,
                 length_function = len,
             )
-        
-        file_extension = get_file_extension(original_filename)
 
-        vectors = None
-        if file_extension == ".zip":
-            vectors = self.readVectorsFromZip(io.BytesIO(file), original_filename)
-        else:
-            if file_extension == ".csv":
-                loader = CSVLoader(file_path=tmp_file_path, encoding="utf-8",csv_args={
+        if file_extension == ".csv":
+            loader = CSVLoader(file_path=tmp_file_path, encoding="utf-8",csv_args={
                     'delimiter': ',',})
-                data = loader.load()
+            data = loader.load()
 
-            elif file_extension == ".pdf":
-                loader = PyPDFLoader(file_path=tmp_file_path)  
-                data = loader.load_and_split(text_splitter)
+        elif file_extension == ".pdf":
+            loader = PyPDFLoader(file_path=tmp_file_path)  
+            data = loader.load_and_split(text_splitter)
             
-            elif file_extension == ".txt":
-                loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
-                data = loader.load_and_split(text_splitter)
-                
-            embeddings = OpenAIEmbeddings()
-
-            vectors = FAISS.from_documents(data, embeddings)
+        elif file_extension == ".txt":
+            loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
+            data = loader.load_and_split(text_splitter)
 
         os.remove(tmp_file_path)
+                
+        embeddings = OpenAIEmbeddings()
 
-        # Save the vectors to a pickle file
-        with open(f"{self.PATH}/{original_filename}.pkl", "wb") as f:
-            pickle.dump(vectors, f)
+        vectors = FAISS.from_documents(data, embeddings)
+        return vectors
 
 
     def getDocEmbeds(self, file, original_filename):
