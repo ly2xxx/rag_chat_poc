@@ -1,5 +1,5 @@
 import streamlit as st
-from st_pages import hide_pages, show_pages_from_config, add_page_title, show_pages, Page
+from st_pages import hide_pages, show_pages_from_config, add_page_title, show_pages, Page, Section
 from PIL import Image
 import os
 
@@ -78,7 +78,7 @@ with st.sidebar.expander("💵 Donation"):
     st.write(
     # """ 
     # <h5 style='text-align:center; color: green;'>
-    "👇Support us! Your donation powers our content, and we'll share the code with you as a thank-you.👇"
+    "👇Support a tool that helps you get stuff done. Your donation fuels our improvements. Thank-you! 👇"
     # </h5>
     # """
     )
