@@ -93,6 +93,14 @@ st.markdown(
 
 st.markdown("---")
 
+def generate_thumbnail(image_path, thumbnail_size=(500, 500)):
+    original_image = Image.open(image_path)
+    thumbnail = original_image.resize(thumbnail_size)
+    return thumbnail
+
+mascot_image_file = "Gallery/mascot/01_mascot.jpeg"
+thumbnail = generate_thumbnail(mascot_image_file)
+st.image(thumbnail, caption="Robby", use_column_width=True)
 
 #Description
 typing_script = """
@@ -168,11 +176,6 @@ st.markdown("---")
 paypal_donation_button()
 
 st.markdown("---")
-
-def generate_thumbnail(image_path, thumbnail_size=(100, 100)):
-    original_image = Image.open(image_path)
-    thumbnail = original_image.resize(thumbnail_size)
-    return thumbnail
 
 # Specify the directory path containing image files
 directory_path = "Gallery/"
