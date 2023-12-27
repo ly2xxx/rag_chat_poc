@@ -87,7 +87,7 @@ with st.sidebar.expander("💵 Donation"):
 #Title
 st.markdown(
     """
-    <h2 style='text-align: center;'>Robby, your data-aware assistant 🤖</h1>
+    <h2 style='text-align: center;'>Robby, your data-aware research assistant 🤖</h1>
     """,
     unsafe_allow_html=True,)
 
@@ -146,10 +146,14 @@ st.markdown(
     <br/>
     <h9 style='text-align:left;'>- So that, this digital assistant could be your secret weapon for staying on top of your workload and staying informed, saving you time and effort by identifying the most important information for you.</h9>
     <h5 style='text-align:center;'>I'm Robby, an intelligent chatbot created for exactly this purpose, by combining 
-    the strengths of VectorDB, Langchain and Streamlit. I use large language models (LLM) to provide
+    the strengths of VectorDB, Langchain and Streamlit. I use Retrieval-augmented generation (RAG) technique and large language models (LLM) to provide
     context-sensitive interactions. 🧠</h5>
     <h8>
     🚀 Make the most of your OpenAI API credits and unlock insights from your data with my help. I can parse PDFs, TXT, CSVs, websites, and even YouTube transcripts like a pro, so let's get analyzing! 
+    </h8>
+    <br>
+    <h8>
+    🚀 December 2023 - added new feature to Upload your research materials in a zip file and let Robby turn it into a comprehensive chat for a complete overview! 
     </h8>
     <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
