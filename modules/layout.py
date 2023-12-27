@@ -21,6 +21,7 @@ class Layout:
             """
             <div style='text-align: center;'>
                 <h4>Enter your <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API key</a> to start chatting</h4>
+                <h6>*Not have an API key? Here are the <a href="https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/" target="_blank">instructions</a> to get your free $5 credit</h6>
             </div>
             """,
             unsafe_allow_html=True,
