@@ -44,6 +44,9 @@ def generate_filename(url):
     
     return filename
 
+def input_callback():
+    st.session_state["reset_chat"] = True
+
 hide_pages(["down"])
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
@@ -67,7 +70,7 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-    web_url = st.text_input(placeholder="Enter Website URL", label_visibility="hidden", label =" ")
+    web_url = st.text_input(placeholder="Enter Website URL", label_visibility="hidden", label =" ", on_change=input_callback)
     if len(web_url) > 0:
         web_context = utils.handle_webload(web_url)
 
@@ -81,7 +84,13 @@ else:
             history = ChatHistory()
             try:
                 uploaded_file = StringIO(web_context)
-                uploaded_file.name = generate_filename(web_url)+str(len(web_context))+".txt"
+
+                web_context = web_context.strip()
+                if web_context.endswith('.pkl'):
+                    uploaded_file.name = web_context[:-4]
+                else:
+                    uploaded_file.name = generate_filename(web_url)+str(len(web_context))+".txt"
+
                 chatbot = utils.setup_chatbot(
                     uploaded_file, st.session_state["model"], st.session_state["temperature"]
                 )

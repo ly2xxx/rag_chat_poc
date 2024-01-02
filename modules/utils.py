@@ -114,7 +114,7 @@ class Utilities:
 
             except Exception as e:
                 print(f"Error loading web page: {e}")
-                return None
+                return url
 
     @staticmethod
     def setup_chatbot(uploaded_file, model, temperature):
