@@ -155,6 +155,10 @@ st.markdown(
     <h8>
     🚀 December 2023 - added new feature to Upload your research materials in a zip file and let Robby turn it into a comprehensive chat for a complete overview! 
     </h8>
+    <br>
+    <h8>
+    🚀 January 2024 - added new feature to Download chat history to read anytime offline. Or for regroup research! 
+    </h8>
     <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
     unsafe_allow_html=True)

@@ -135,6 +135,7 @@ else:
                             with st.expander("Display the agent's thoughts"):
                                 st.write(cleaned_thoughts)
 
+                    sidebar.download_conversation(st.session_state["history"], uploaded_file.name)
                     history.generate_messages(response_container)
             except Exception as e:
                 st.error(f"Error: {str(e)}")
