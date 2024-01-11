@@ -64,14 +64,14 @@ hide_pages(["down"])
 with st.sidebar.expander("📬 Contact"):
 
     st.write("**GitHub:**",
-"[ly2xxx/rag_chat_poc](https://github.com/ly2xxx/rag_chat_poc)")
+"[jupyter notebook demo](https://github.com/ly2xxx/py_playground/blob/main/mistralai-cpu.ipynb)")
 
     st.write("**Medium:** "
 "[@ly2xxx](https://edisonideas.wordpress.com/)")
 
     # st.write("**Twitter:** [@yvann_hub](https://twitter.com/yvann_hub)")
     st.write("**Mail** : ly2xxx@hotmail.com")
-    st.write("**Created by Yvann, Adapted by YL**")
+    # st.write("**Inspired by Yvann's pdf chatbot project, Adapted by YL**")
 
 #Donate
 with st.sidebar.expander("💵 Donation"):
