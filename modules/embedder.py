@@ -7,6 +7,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import HuggingFaceEmbeddings
 import zipfile
 import io
 import streamlit as st
@@ -122,10 +123,18 @@ class Embedder:
 
         os.remove(tmp_file_path)
                 
-        embeddings = OpenAIEmbeddings()
+        embeddings = self.initializeEmbeddings()
 
         vectors = FAISS.from_documents(data, embeddings)
         return vectors
+
+    def initializeEmbeddings(self):
+        # embeddings = OpenAIEmbeddings()
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-l6-v2"
+            # ,model_kwargs={"device": "cuda"},
+        )
+        return embeddings
 
 
     def getDocEmbeds(self, file, original_filename):
