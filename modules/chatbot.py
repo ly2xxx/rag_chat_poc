@@ -61,39 +61,47 @@ class Chatbot:
         #                     repo_id=repo_id, model_kwargs={"temperature":0.2, "max_new_tokens":50})
 
         ##cpu
-        model = AutoModelForCausalLM.from_pretrained(
-            "TheBloke/Mistral-7B-Instruct-v0.1-GGUF",
-            model_file="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
-            model_type="mistral", 
-            gpu_layers=0, hf=True
-        )
-        tokenizer = AutoTokenizer.from_pretrained(
-            "mistralai/Mistral-7B-v0.1", 
-            use_fast=True
-        )
+        # model = AutoModelForCausalLM.from_pretrained(
+        #     "TheBloke/Mistral-7B-Instruct-v0.1-GGUF",
+        #     model_file="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+        #     model_type="mistral", 
+        #     gpu_layers=0, hf=True
+        # )
+        # tokenizer = AutoTokenizer.from_pretrained(
+        #     "mistralai/Mistral-7B-v0.1", 
+        #     use_fast=True
+        # )
 
-        # Create a pipeline
-        pipeline = transformers.pipeline(model=model, tokenizer=tokenizer, task='text-generation')
+        # # Create a pipeline
+        # pipeline = transformers.pipeline(model=model, tokenizer=tokenizer, task='text-generation')
 
-        llm = HuggingFacePipeline(
-            pipeline=pipeline,
-            )
+        # llm = HuggingFacePipeline(
+        #     pipeline=pipeline,
+        #     )
 
         ##gpu
-        # model_id = "mistralai/Mistral-7B-Instruct-v0.1"
+        input = torch.randn(2,3)
+        input = input.to("cuda")
 
-        # bnb_config = BitsAndBytesConfig(
-        # load_in_4bit=True,
-        # bnb_4bit_compute_dtype=torch.float16
-        # )
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        print("Device:", device)
+        if device == 'cuda':
+            print(torch.cuda.get_device_name(0))
+
+        model_id = "mistralai/Mistral-7B-Instruct-v0.1"
+        #https://huggingface.co/blog/4bit-transformers-bitsandbytes
+        bnb_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16
+        )
         
-        # text_generation_pipeline = transformers.pipeline(
-        # "text-generation",
-        # model=model_id,
-        # model_kwargs={"torch_dtype": torch.float16, "load_in_4bit": True, "quantization_config": bnb_config},
-        # )
+        text_generation_pipeline = transformers.pipeline(
+            "text-generation",
+            model=model_id,
+            model_kwargs={"torch_dtype": torch.float16, "load_in_4bit": True, "quantization_config": bnb_config},
+        )
 
-        # llm = HuggingFacePipeline(pipeline=text_generation_pipeline)
+        llm = HuggingFacePipeline(pipeline=text_generation_pipeline)
 
         return llm
 
