@@ -34,6 +34,12 @@ python -m venv .venv
 Install the required dependencies in the virtual environment :
 
 `pip install -r requirements.txt`
+then
+`pip install bitsandbytes accelerate xformers einops langchain faiss-cpu transformers sentence-transformers ctransformers`
+then IF USE GPU
+`pip uninstall torch`
+then
+`pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu121`
 
 
 Launch the chat service locally :

@@ -3,6 +3,11 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
 from langchain.callbacks import get_openai_callback
+from ctransformers import AutoModelForCausalLM
+from transformers import AutoTokenizer, BitsAndBytesConfig
+from langchain.llms import HuggingFacePipeline
+import torch
+import transformers
 
 #fix Error: module 'langchain' has no attribute 'verbose'
 import langchain
@@ -33,7 +38,7 @@ class Chatbot:
         """
         Start a conversational chat with a model via Langchain
         """
-        llm = ChatOpenAI(model_name=self.model_name, temperature=self.temperature)
+        llm = self.initializeLLM()
 
         retriever = self.vectors.as_retriever()
 
@@ -47,6 +52,50 @@ class Chatbot:
         st.session_state["history"].append((query, result["answer"]))
         #count_tokens_chain(chain, chain_input)
         return result["answer"]
+
+    def initializeLLM(self):
+        # llm = ChatOpenAI(model_name=self.model_name, temperature=self.temperature)
+
+        # repo_id = "mistralai/Mistral-7B-v0.1"
+        # llm = HuggingFaceHub(huggingfacehub_api_token='your huggingface access token here', 
+        #                     repo_id=repo_id, model_kwargs={"temperature":0.2, "max_new_tokens":50})
+
+        ##cpu
+        model = AutoModelForCausalLM.from_pretrained(
+            "TheBloke/Mistral-7B-Instruct-v0.1-GGUF",
+            model_file="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+            model_type="mistral", 
+            gpu_layers=0, hf=True
+        )
+        tokenizer = AutoTokenizer.from_pretrained(
+            "mistralai/Mistral-7B-v0.1", 
+            use_fast=True
+        )
+
+        # Create a pipeline
+        pipeline = transformers.pipeline(model=model, tokenizer=tokenizer, task='text-generation')
+
+        llm = HuggingFacePipeline(
+            pipeline=pipeline,
+            )
+
+        ##gpu
+        # model_id = "mistralai/Mistral-7B-Instruct-v0.1"
+
+        # bnb_config = BitsAndBytesConfig(
+        # load_in_4bit=True,
+        # bnb_4bit_compute_dtype=torch.float16
+        # )
+        
+        # text_generation_pipeline = transformers.pipeline(
+        # "text-generation",
+        # model=model_id,
+        # model_kwargs={"torch_dtype": torch.float16, "load_in_4bit": True, "quantization_config": bnb_config},
+        # )
+
+        # llm = HuggingFacePipeline(pipeline=text_generation_pipeline)
+
+        return llm
 
 
 def count_tokens_chain(chain, query):

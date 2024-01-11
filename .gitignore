@@ -113,7 +113,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-
+.venvgpu
+.venv11
 .venv
 env/
 venv/
