@@ -14,7 +14,7 @@ from langchain.text_splitter import CharacterTextSplitter
 from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
-hide_pages(["down"])
+hide_pages(["Robby-Summary-youtube", "down"])
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()
@@ -64,6 +64,7 @@ else:
             chunks = text_splitter.split_text(finalString)
 
             #The model `text-davinci-003` has been deprecated
+            #https://github.com/openai/openai-cookbook/blob/main/examples/How_to_handle_rate_limits.ipynb
             # summary_chain = load_summarize_chain(OpenAI(temperature=0),
             summary_chain = load_summarize_chain(ChatOpenAI(model_name="gpt-3.5-turbo-1106", temperature=0),
                                             chain_type="map_reduce",verbose=True)
