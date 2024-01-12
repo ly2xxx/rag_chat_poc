@@ -7,6 +7,7 @@ from modules.sidebar import Sidebar
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain.chains.summarize import load_summarize_chain
 from langchain.chains import AnalyzeDocumentChain
+from langchain.chat_models import ChatOpenAI
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain.llms import OpenAI
 from langchain.text_splitter import CharacterTextSplitter
@@ -62,7 +63,9 @@ else:
             text_splitter = CharacterTextSplitter()
             chunks = text_splitter.split_text(finalString)
 
-            summary_chain = load_summarize_chain(OpenAI(temperature=0),
+            #The model `text-davinci-003` has been deprecated
+            # summary_chain = load_summarize_chain(OpenAI(temperature=0),
+            summary_chain = load_summarize_chain(ChatOpenAI(model_name="gpt-3.5-turbo-1106", temperature=0),
                                             chain_type="map_reduce",verbose=True)
             
             summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=summary_chain)
