@@ -8,6 +8,8 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
+from InstructorEmbedding import INSTRUCTOR
+from langchain.embeddings import HuggingFaceInstructEmbeddings
 import zipfile
 import io
 import streamlit as st
@@ -130,10 +132,25 @@ class Embedder:
 
     def initializeEmbeddings(self):
         # embeddings = OpenAIEmbeddings()
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-l6-v2"
-            # ,model_kwargs={"device": "cuda"},
-        )
+        # https://ai.stackexchange.com/questions/42160/why-are-the-vector-stores-i-generate-via-langchain-faiss-from-documents-always
+        # https://colab.research.google.com/drive/1h2505J5H4Y9vngzPD08ppf1ga8sWxLvZ?usp=sharing
+        modelPath = "all-MiniLM-L6-v2"
+        embeddings = HuggingFaceEmbeddings(model_name=modelPath,model_kwargs={"device": "cuda:0"})
+        # embeddings = HuggingFaceEmbeddings(
+        #     # model_name="sentence-transformers/all-MiniLM-l6-v2"
+        #     model_name="sentence-transformers/all-mpnet-base-v2"
+        #     ,model_kwargs={"device": "cuda:0"},
+        # )
+
+        # https://colab.research.google.com/drive/1oCrSkij1NNedV_yZzRTTv0VUjAAxSgCB?usp=sharing#scrollTo=8nDH7kaURj5I
+        # embeddings = HuggingFaceInstructEmbeddings(
+        #     model_name="hkunlp/instructor-large"
+        #     ,model_kwargs={"device": "cpu"}
+        # )
+        # embeddings = HuggingFaceEmbeddings(
+        #     model_name="hkunlp/instructor-large"
+        #     ,model_kwargs={"device": "cuda:0"},
+        # )
         return embeddings
 
 
