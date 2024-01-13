@@ -13,6 +13,7 @@ from langchain.embeddings import HuggingFaceInstructEmbeddings
 import zipfile
 import io
 import streamlit as st
+from sentence_transformers import SentenceTransformer
 
 class Embedder:
 
@@ -128,6 +129,8 @@ class Embedder:
         embeddings = self.initializeEmbeddings()
 
         vectors = FAISS.from_documents(data, embeddings)
+        # Error: 'Document' object has no attribute 'replace'
+        # vectors = FAISS.from_texts(data, embeddings)
         return vectors
 
     def initializeEmbeddings(self):
@@ -135,6 +138,8 @@ class Embedder:
         # https://ai.stackexchange.com/questions/42160/why-are-the-vector-stores-i-generate-via-langchain-faiss-from-documents-always
         # https://colab.research.google.com/drive/1h2505J5H4Y9vngzPD08ppf1ga8sWxLvZ?usp=sharing
         modelPath = "all-MiniLM-L6-v2"
+        # https://github.com/UKPLab/sentence-transformers/blob/master/docs/quickstart.md
+        # embeddings = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
         embeddings = HuggingFaceEmbeddings(model_name=modelPath,model_kwargs={"device": "cuda:0"})
         # embeddings = HuggingFaceEmbeddings(
         #     # model_name="sentence-transformers/all-MiniLM-l6-v2"
