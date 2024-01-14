@@ -47,7 +47,7 @@ def generate_filename(url):
 def input_callback():
     st.session_state["reset_chat"] = True
 
-hide_pages(["Robby-Summary-youtube", "down"])
+hide_pages(["down"])
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
 utils_module = reload_module('modules.utils')

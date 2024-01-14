@@ -54,7 +54,7 @@ show_pages(
     ]
 )
 
-hide_pages(["Robby-Summary-youtube", "down"])
+hide_pages(["down"])
 
 #Config
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")

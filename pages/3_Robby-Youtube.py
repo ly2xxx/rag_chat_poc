@@ -5,16 +5,18 @@ from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from youtube_transcript_api import YouTubeTranscriptApi
-from langchain.chains.summarize import load_summarize_chain
-from langchain.chains import AnalyzeDocumentChain
-from langchain.chat_models import ChatOpenAI
+# from langchain.chains.summarize import load_summarize_chain
+# from langchain.chains import AnalyzeDocumentChain
 from youtube_transcript_api import YouTubeTranscriptApi
-from langchain.llms import OpenAI
-from langchain.text_splitter import CharacterTextSplitter
+# from langchain.llms import OpenAI
+# from langchain.text_splitter import CharacterTextSplitter
+# from langchain.document_loaders import YoutubeLoader
+from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain.chat_models import ChatOpenAI
 from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
-hide_pages(["Robby-Summary-youtube", "down"])
+hide_pages(["down"])
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()
@@ -54,24 +56,36 @@ else:
         video_id = get_youtube_id(video_url)
 
         if video_id != "":
+            # loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
+            # data = loader.load()
+
             t = YouTubeTranscriptApi.get_transcript(video_id, languages=('en','fr','es', 'zh-cn', 'hi', 'ar', 'bn', 'ru', 'pt', 'sw' ))
             finalString = ""
             for item in t:
                 text = item['text']
                 finalString += text + " "
 
-            text_splitter = CharacterTextSplitter()
-            chunks = text_splitter.split_text(finalString)
+            # Get the first 3600 tokens
+            first_3600_tokens = " ".join(finalString.split()[:3600])
 
-            #The model `text-davinci-003` has been deprecated
-            #https://github.com/openai/openai-cookbook/blob/main/examples/How_to_handle_rate_limits.ipynb
+            # text_splitter = CharacterTextSplitter()
+            # chunks = text_splitter.split_text(finalString)
+
             # summary_chain = load_summarize_chain(OpenAI(temperature=0),
-            summary_chain = load_summarize_chain(ChatOpenAI(model_name="gpt-3.5-turbo-1106", temperature=0),
-                                            chain_type="map_reduce",verbose=True)
+            #                                 chain_type="map_reduce",verbose=True)
             
-            summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=summary_chain)
+            # summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=summary_chain)
 
-            answer = summarize_document_chain.run(chunks)
+            # answer = summarize_document_chain.run(chunks)
+
+            human_prompt = HumanMessagePromptTemplate.from_template("Summarize the following: \n{youtube_transcript}")
+            chat_prompt = ChatPromptTemplate.from_messages([human_prompt])
+            llm = ChatOpenAI(temperature=0)
+            answer = llm(chat_prompt.format_prompt(youtube_transcript=first_3600_tokens).to_messages())
 
             st.subheader(answer)
+
+            # Display the agent's thoughts = finalString || data[0].page_content
+            with st.expander("Display the raw transcripts"):
+                st.write(finalString) 
             sidebar.donation()
