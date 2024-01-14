@@ -4,12 +4,15 @@ import re
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
-from youtube_transcript_api import YouTubeTranscriptApi
-from langchain.chains.summarize import load_summarize_chain
-from langchain.chains import AnalyzeDocumentChain
-from youtube_transcript_api import YouTubeTranscriptApi
-from langchain.llms import OpenAI
-from langchain.text_splitter import CharacterTextSplitter
+# from youtube_transcript_api import YouTubeTranscriptApi
+# from langchain.chains.summarize import load_summarize_chain
+# from langchain.chains import AnalyzeDocumentChain
+# from youtube_transcript_api import YouTubeTranscriptApi
+# from langchain.llms import OpenAI
+# from langchain.text_splitter import CharacterTextSplitter
+from langchain.document_loaders import YoutubeLoader
+from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain.chat_models import ChatOpenAI
 from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
@@ -53,21 +56,32 @@ else:
         video_id = get_youtube_id(video_url)
 
         if video_id != "":
-            t = YouTubeTranscriptApi.get_transcript(video_id, languages=('en','fr','es', 'zh-cn', 'hi', 'ar', 'bn', 'ru', 'pt', 'sw' ))
-            finalString = ""
-            for item in t:
-                text = item['text']
-                finalString += text + " "
+            loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
+            data = loader.load()
+            human_prompt = HumanMessagePromptTemplate.from_template("Summarize the following: \n{youtube_transcript}")
+            chat_prompt = ChatPromptTemplate.from_messages([human_prompt])
+            llm = ChatOpenAI(temperature=0)
+            answer = llm(chat_prompt.format_prompt(youtube_transcript=data[0].page_content).to_messages())
 
-            text_splitter = CharacterTextSplitter()
-            chunks = text_splitter.split_text(finalString)
+            # t = YouTubeTranscriptApi.get_transcript(video_id, languages=('en','fr','es', 'zh-cn', 'hi', 'ar', 'bn', 'ru', 'pt', 'sw' ))
+            # finalString = ""
+            # for item in t:
+            #     text = item['text']
+            #     finalString += text + " "
 
-            summary_chain = load_summarize_chain(OpenAI(temperature=0),
-                                            chain_type="map_reduce",verbose=True)
+            # text_splitter = CharacterTextSplitter()
+            # chunks = text_splitter.split_text(finalString)
+
+            # summary_chain = load_summarize_chain(OpenAI(temperature=0),
+            #                                 chain_type="map_reduce",verbose=True)
             
-            summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=summary_chain)
+            # summarize_document_chain = AnalyzeDocumentChain(combine_docs_chain=summary_chain)
 
-            answer = summarize_document_chain.run(chunks)
+            # answer = summarize_document_chain.run(chunks)
 
             st.subheader(answer)
+
+            # Display the agent's thoughts
+            with st.expander("Display the raw transcripts"):
+                st.write(data[0].page_content)
             sidebar.donation()
