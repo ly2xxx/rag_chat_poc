@@ -77,9 +77,12 @@ class Sidebar:
             </a> <span style="color:green; font-weight:bold;">(Combine multiple .pkl files into a .zip for deeper AI analysis later)</span>'
             st.markdown(href, unsafe_allow_html=True)
 
-    def download_conversation(self, chathistory, chat_filename):
+    def download_conversation(self, chathistory, chat_filename, optional_download_title="Chat History"):
         # Convert the list to a string
-        chat_text = "\n".join(map(str, chathistory))
+        if(optional_download_title=="Chat History"):
+            chat_text = "\n".join(map(str, chathistory))
+        else:
+            chat_text = "".join(map(str, chathistory))
 
         # Convert the string to bytes
         bytes_content = chat_text.encode()
@@ -90,7 +93,7 @@ class Sidebar:
         # Create a base64-encoded link for downloading
         b64 = base64.b64encode(bytes_content).decode()
         href = f'<a href="data:file/txt;base64,{b64}" download=\'{chat_filename}.txt\'>\
-            Download Chat History .txt\
+            Download {optional_download_title} .txt\
         </a> <span style="color:green; font-weight:bold;">(Combine multiple .txt files into a .zip for deeper AI analysis later)</span>'
 
         # Display the download link
