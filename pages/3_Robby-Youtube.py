@@ -4,12 +4,12 @@ import re
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
-# from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api import YouTubeTranscriptApi
 # from langchain.chains.summarize import load_summarize_chain
 # from langchain.chains import AnalyzeDocumentChain
 # from langchain.llms import OpenAI
 # from langchain.text_splitter import CharacterTextSplitter
-from langchain.document_loaders import YoutubeLoader
+# from langchain.document_loaders import YoutubeLoader
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain.chat_models import ChatOpenAI
 from st_pages import hide_pages
@@ -55,15 +55,15 @@ else:
         video_id = get_youtube_id(video_url)
 
         if video_id != "":
-            loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
-            data = loader.load()
-            finalString = data[0].page_content
+            # loader = YoutubeLoader.from_youtube_url(video_url, add_video_info=True)
+            # data = loader.load()
+            # finalString = data[0].page_content
 
-            # t = YouTubeTranscriptApi.get_transcript(video_id, languages=('en','fr','es', 'zh-cn', 'hi', 'ar', 'bn', 'ru', 'pt', 'sw' ))
-            # finalString = ""
-            # for item in t:
-            #     text = item['text']
-            #     finalString += text + " "
+            t = YouTubeTranscriptApi.get_transcript(video_id, languages=('en','fr','es', 'zh-cn', 'hi', 'ar', 'bn', 'ru', 'pt', 'sw' ))
+            finalString = ""
+            for item in t:
+                text = item['text']
+                finalString += text + " "
 
             # Get the first 3600 tokens
             first_3600_tokens = " ".join(finalString.split()[:3600])
