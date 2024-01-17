@@ -40,7 +40,7 @@ class Utilities:
     def handle_upload(file_types):
         """
         Handles and display uploaded_file
-        :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
+        :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt", "zip"]
         """
         st.sidebar.markdown("#### Your file👇\n(Don't worry, we don't store your file !)")
         uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
@@ -72,9 +72,9 @@ class Utilities:
             file_extension = get_file_extension(uploaded_file.name)
 
             # Show the contents of the file based on its extension
-            #if file_extension == ".csv" :
-            #    show_csv_file(uploaded_file)
-            if file_extension== ".pdf" : 
+            if file_extension == ".csv" :
+                show_csv_file(uploaded_file)
+            elif file_extension== ".pdf" : 
                 show_pdf_file(uploaded_file)
             elif file_extension== ".txt" : 
                 show_txt_file(uploaded_file)
