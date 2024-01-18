@@ -8,12 +8,12 @@ from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import HuggingFaceEmbeddings
-from InstructorEmbedding import INSTRUCTOR
-from langchain.embeddings import HuggingFaceInstructEmbeddings
+# from InstructorEmbedding import INSTRUCTOR
+# from langchain.embeddings import HuggingFaceInstructEmbeddings
 import zipfile
 import io
 import streamlit as st
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
 class Embedder:
 
