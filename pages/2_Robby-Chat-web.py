@@ -88,8 +88,6 @@ else:
                 web_context = web_context.strip()
                 if web_context.endswith('.pkl'):
                     uploaded_file.name = web_context[:-4]
-                    # if(web_url.startswith('+')):
-                    #     uploaded_file.name = uploaded_file.name[1:]
                 else:
                     uploaded_file.name = generate_filename(web_url)+str(len(web_context))+".txt"
 

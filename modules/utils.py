@@ -131,8 +131,9 @@ class Utilities:
             if reload_prev_vectors:
                 temp_file_name = uploaded_file.name
                 temp_file_name = temp_file_name.lower().replace(".pkl", "")
-                list_of_pkl_files = temp_file_name.split("+")
-                uploaded_file.name = temp_file_name.replace("+", "__")
+                CONST_PKL_SEPARATOR = "++"
+                list_of_pkl_files = temp_file_name.split(CONST_PKL_SEPARATOR)
+                uploaded_file.name = temp_file_name.replace(CONST_PKL_SEPARATOR, "__")
 
                 for filename in list_of_pkl_files:
                     loaded_vectors = embeds.getDocEmbeds(file, filename)

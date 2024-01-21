@@ -29,9 +29,6 @@ class Chatbot:
 
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["context","question" ])
 
-    def getVectors(self):
-        return self.vectors
-
     def conversational_chat(self, query):
         """
         Start a conversational chat with a model via Langchain
