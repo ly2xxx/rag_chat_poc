@@ -117,7 +117,7 @@ class Utilities:
                 return url
 
     @staticmethod
-    def setup_chatbot(uploaded_file, model, temperature):
+    def setup_chatbot(uploaded_file, model, temperature, reload_prev_vectors=False):
         """
         Sets up the chatbot with the uploaded file, model, and temperature
         """
@@ -126,11 +126,26 @@ class Utilities:
         with st.spinner("Processing..."):
             uploaded_file.seek(0)
             file = uploaded_file.read()
-            # Get the document embeddings for the uploaded file
-            vectors = embeds.getDocEmbeds(file, uploaded_file.name)
+
+            vectors = None
+            if reload_prev_vectors:
+                temp_file_name = uploaded_file.name
+                temp_file_name = temp_file_name.lower().replace(".pkl", "")
+                list_of_pkl_files = temp_file_name.split("+")
+                uploaded_file.name = temp_file_name.replace("+", "__")
+
+                for filename in list_of_pkl_files:
+                    loaded_vectors = embeds.getDocEmbeds(file, filename)
+                    if vectors is None:
+                        vectors = loaded_vectors
+                    else:
+                        vectors.merge_from(loaded_vectors)
+            else:
+                # Get the document embeddings for the uploaded file
+                vectors = embeds.getDocEmbeds(file, uploaded_file.name)
 
             # Create a Chatbot instance with the specified model and temperature
-            chatbot = Chatbot(model, temperature,vectors)
+            chatbot = Chatbot(model, temperature, vectors)
         st.session_state["ready"] = True
 
         return chatbot

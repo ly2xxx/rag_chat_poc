@@ -88,11 +88,13 @@ else:
                 web_context = web_context.strip()
                 if web_context.endswith('.pkl'):
                     uploaded_file.name = web_context[:-4]
+                    # if(web_url.startswith('+')):
+                    #     uploaded_file.name = uploaded_file.name[1:]
                 else:
                     uploaded_file.name = generate_filename(web_url)+str(len(web_context))+".txt"
 
                 chatbot = utils.setup_chatbot(
-                    uploaded_file, st.session_state["model"], st.session_state["temperature"]
+                    uploaded_file, st.session_state["model"], st.session_state["temperature"], ".pkl".lower() in web_url.lower()
                 )
                 st.session_state["chatbot"] = chatbot
                 sidebar.download_model(st.session_state["vectordb"])
