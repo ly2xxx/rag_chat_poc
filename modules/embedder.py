@@ -134,28 +134,10 @@ class Embedder:
         return vectors
 
     def initializeEmbeddings(self):
-        # embeddings = OpenAIEmbeddings()
-        # https://ai.stackexchange.com/questions/42160/why-are-the-vector-stores-i-generate-via-langchain-faiss-from-documents-always
-        # https://colab.research.google.com/drive/1h2505J5H4Y9vngzPD08ppf1ga8sWxLvZ?usp=sharing
         modelPath = "all-MiniLM-L6-v2"
-        # https://github.com/UKPLab/sentence-transformers/blob/master/docs/quickstart.md
-        # embeddings = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
         embeddings = HuggingFaceEmbeddings(model_name=modelPath)
-        # embeddings = HuggingFaceEmbeddings(
-        #     # model_name="sentence-transformers/all-MiniLM-l6-v2"
-        #     model_name="sentence-transformers/all-mpnet-base-v2"
-        #     ,model_kwargs={"device": "cuda:0"},
-        # )
-
-        # https://colab.research.google.com/drive/1oCrSkij1NNedV_yZzRTTv0VUjAAxSgCB?usp=sharing#scrollTo=8nDH7kaURj5I
-        # embeddings = HuggingFaceInstructEmbeddings(
-        #     model_name="hkunlp/instructor-large"
-        #     ,model_kwargs={"device": "cpu"}
-        # )
-        # embeddings = HuggingFaceEmbeddings(
-        #     model_name="hkunlp/instructor-large"
-        #     ,model_kwargs={"device": "cuda:0"},
-        # )
+        # Use embedding function to store them in vector db
+        # ollamaEmbeddings = OllamaEmbeddings(model="llama2:7b-chat-q4_0")
         return embeddings
 
 
