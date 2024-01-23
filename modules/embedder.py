@@ -140,7 +140,7 @@ class Embedder:
         modelPath = "all-MiniLM-L6-v2"
         # https://github.com/UKPLab/sentence-transformers/blob/master/docs/quickstart.md
         # embeddings = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-        embeddings = HuggingFaceEmbeddings(model_name=modelPath,model_kwargs={"device": "cuda:0"})
+        embeddings = HuggingFaceEmbeddings(model_name=modelPath)
         # embeddings = HuggingFaceEmbeddings(
         #     # model_name="sentence-transformers/all-MiniLM-l6-v2"
         #     model_name="sentence-transformers/all-mpnet-base-v2"
