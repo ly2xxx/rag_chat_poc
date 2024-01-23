@@ -2,12 +2,12 @@ import streamlit as st
 from langchain.chat_models import ChatOllama
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
-from langchain.callbacks import get_openai_callback
-from ctransformers import AutoModelForCausalLM
-from transformers import AutoTokenizer, BitsAndBytesConfig
-from langchain.llms import HuggingFacePipeline
-import torch
-import transformers
+# from langchain.callbacks import get_openai_callback
+# from ctransformers import AutoModelForCausalLM
+# from transformers import AutoTokenizer, BitsAndBytesConfig
+# from langchain.llms import HuggingFacePipeline
+# import torch
+# import transformers
 
 #fix Error: module 'langchain' has no attribute 'verbose'
 import langchain
@@ -79,11 +79,11 @@ class Chatbot:
         return llm
 
 
-def count_tokens_chain(chain, query):
-    with get_openai_callback() as cb:
-        result = chain.run(query)
-        st.write(f'###### Tokens used in this conversation : {cb.total_tokens} tokens')
-    return result 
+# def count_tokens_chain(chain, query):
+#     with get_openai_callback() as cb:
+#         result = chain.run(query)
+#         st.write(f'###### Tokens used in this conversation : {cb.total_tokens} tokens')
+#     return result 
 
     
     
