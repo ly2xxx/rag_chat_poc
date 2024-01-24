@@ -49,12 +49,11 @@ show_pages(
         # Can use :<icon-name>: or the actual icon
         Page("./pages/1_Robby-Chat-file.py", "Robby-Chat-file", "📄"),
         Page("./pages/2_Robby-Chat-web.py", "Robby-Chat-web", "🌐"),
-        Page("./pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
-        Page("./pages/download.py", "down", "⤓"),
+        Page("./pages/download.py", "download", "⤓"),
     ]
 )
 
-hide_pages(["down"])
+hide_pages(["download"])
 
 #Config
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")

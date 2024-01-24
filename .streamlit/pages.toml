@@ -14,10 +14,5 @@ name = "Robby-Chat-web"
 icon = "🌐"
 
 [[pages]]
-path = "pages/3_Robby-Youtube.py"
-name = "Robby-Summary-youtube"
-icon = "🎬"
-
-[[pages]]
 path = "pages/download.py"
-name = "down"
+name = "download"
