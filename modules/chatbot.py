@@ -54,7 +54,7 @@ class Chatbot:
         return result["answer"]
 
     def initializeLLM(self):
-        llm = ChatOllama(model="mistral", temperature=self.temperature)
+        llm = ChatOllama(model=self.model_name, temperature=self.temperature)
    
         # model = AutoModelForCausalLM.from_pretrained(
         #     "TheBloke/Mistral-7B-Instruct-v0.1-GGUF",

@@ -35,9 +35,7 @@ layout.show_header("PDF, TXT, CSV")
 
 user_api_key = utils.load_api_key()
 
-if not user_api_key:
-    layout.show_api_key_missing()
-else:
+if True:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
     uploaded_file = utils.handle_upload(["pdf", "txt", "csv", "zip"])

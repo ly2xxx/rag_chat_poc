@@ -65,10 +65,7 @@ layout.show_header("Website")
 
 user_api_key = utils.load_api_key()
 
-if not user_api_key:
-    layout.show_api_key_missing()
-else:
-    os.environ["OPENAI_API_KEY"] = user_api_key
+if True:
 
     web_url = st.text_input(placeholder="Enter Website URL", label_visibility="hidden", label =" ", on_change=input_callback)
     if len(web_url) > 0:

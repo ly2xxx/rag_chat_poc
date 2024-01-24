@@ -8,21 +8,7 @@ class Layout:
         """
         st.markdown(
             f"""
-            <h1 style='text-align: center;'> Ask Robby about your {types_files} ! 😁</h1>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    def show_api_key_missing(self):
-        """
-        Displays a message if the user has not entered an API key
-        """
-        st.markdown(
-            """
-            <div style='text-align: center;'>
-                <h4>Enter your <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API key</a> to start chatting</h4>
-                <h6>*Not have an API key? Here are the <a href="https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/" target="_blank">instructions</a> to get your free $5 credit</h6>
-            </div>
+            <h1 style='text-align: center;'> Ask Rob about your {types_files} </h1>
             """,
             unsafe_allow_html=True,
         )

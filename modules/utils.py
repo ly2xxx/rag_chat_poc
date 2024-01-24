@@ -22,16 +22,16 @@ class Utilities:
         if os.path.exists(".env") and os.environ.get("OPENAI_API_KEY") is not None:
             user_api_key = os.environ["OPENAI_API_KEY"]
             st.sidebar.success("API key loaded from .env", icon="🚀")
-        else:
-            if st.session_state.api_key is not None:
-                user_api_key = st.session_state.api_key
-                st.sidebar.success("API key loaded from previous input", icon="🚀")
-            else:
-                user_api_key = st.sidebar.text_input(
-                    label="#### Your OpenAI API key👇\n(Don't worry, we don't store your key ever !)", placeholder="sk-...", type="password"
-                )
-                if user_api_key:
-                    st.session_state.api_key = user_api_key
+        # else:
+        #     if st.session_state.api_key is not None:
+        #         user_api_key = st.session_state.api_key
+        #         st.sidebar.success("API key loaded from previous input", icon="🚀")
+        #     else:
+        #         user_api_key = st.sidebar.text_input(
+        #             label="#### Your OpenAI API key👇\n(Don't worry, we don't store your key ever !)", placeholder="sk-...", type="password"
+        #         )
+        #         if user_api_key:
+        #             st.session_state.api_key = user_api_key
 
         return user_api_key
 
@@ -42,7 +42,6 @@ class Utilities:
         Handles and display uploaded_file
         :param file_types: List of accepted file types, e.g., ["csv", "pdf", "txt"]
         """
-        st.sidebar.markdown("#### Your file👇\n(Don't worry, we don't store your file !)")
         uploaded_file = st.sidebar.file_uploader("upload", type=file_types, label_visibility="collapsed")
         if uploaded_file is not None:
 

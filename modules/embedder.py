@@ -138,7 +138,7 @@ class Embedder:
         # modelPath = "all-MiniLM-L6-v2"
         # embeddings = HuggingFaceEmbeddings(model_name=modelPath)
         # Use embedding function to store them in vector db
-        embeddings = OllamaEmbeddings(model="mistral")
+        embeddings = OllamaEmbeddings(model=st.session_state["model"])
         return embeddings
 
 

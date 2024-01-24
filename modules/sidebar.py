@@ -4,7 +4,7 @@ import re
 
 class Sidebar:
 
-    MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4"]
+    MODEL_OPTIONS = ["mistral"]
     TEMPERATURE_MIN_VALUE = 0.0
     TEMPERATURE_MAX_VALUE = 1.0
     TEMPERATURE_DEFAULT_VALUE = 0.0
@@ -29,13 +29,11 @@ class Sidebar:
 
     @staticmethod
     def about():
-        about = st.sidebar.expander("🧠 About Robby ")
+        about = st.sidebar.expander("🧠 About Rob ")
         sections = [
-            "#### Robby is an AI chatbot with a conversational memory, designed to allow users to discuss their data in a more intuitive way. 📄",
+            "#### Rob is an AI chatbot with a conversational memory, designed to allow users to discuss their data in a more intuitive way. 📄",
             "#### It uses large language models to provide users with natural language interactions about user data content. 🌐",
-            "#### Powered by [Langchain](https://github.com/hwchase17/langchain), [OpenAI](https://platform.openai.com/docs/models/gpt-3-5) and [Streamlit](https://github.com/streamlit/streamlit) ⚡",
-            "#### Source code: ly2xxx/rag_chat_poc](https://github.com/ly2xxx/rag_chat_poc)",
-        ]
+           ]
         for section in sections:
             about.write(section)
 
@@ -60,7 +58,7 @@ class Sidebar:
         st.session_state["temperature"] = temperature
         
     def show_options(self):
-        with st.sidebar.expander("🛠️ Robby's Tools", expanded=False):
+        with st.sidebar.expander("🛠️ Rob's Toolkits", expanded=False):
 
             self.reset_chat_button()
             self.model_selector()

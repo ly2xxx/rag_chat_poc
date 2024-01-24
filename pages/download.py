@@ -55,10 +55,7 @@ user_api_key = utils.load_api_key()
 
 sidebar.about()
 
-if not user_api_key:
-    layout.show_api_key_missing()
-
-else:
+if True:
     current_datetime = datetime.now().strftime("pkl-%d%m%Y.%H.%M.%S")
     create_download_zip(VECTOR_PATH, current_datetime)
     delete_old_files(VECTOR_PATH)
