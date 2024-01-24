@@ -62,7 +62,6 @@ if True:
                 with prompt_container:
                     # Display the prompt form
                     is_ready, user_input = layout.prompt_form()
-                    sidebar.donation()
 
                     # Initialize the chat history
                     history.initialize(uploaded_file)
