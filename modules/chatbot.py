@@ -3,6 +3,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
 from langchain.callbacks import get_openai_callback
+import time
 
 #fix Error: module 'langchain' has no attribute 'verbose'
 import langchain
@@ -30,23 +31,39 @@ class Chatbot:
     QA_PROMPT = PromptTemplate(template=qa_template, input_variables=["context","question" ])
 
     def conversational_chat(self, query):
+        start_time = time.time()
         """
         Start a conversational chat with a model via Langchain
         """
         llm = ChatOpenAI(model_name=self.model_name, temperature=self.temperature)
 
-        retriever = self.vectors.as_retriever()
+        retriever = self.vectors.as_retriever(search_type="similarity", search_kwargs={"k":3})
 
 
-        chain = ConversationalRetrievalChain.from_llm(llm=llm,
-            retriever=retriever, verbose=True, return_source_documents=True, max_tokens_limit=4097, combine_docs_chain_kwargs={'prompt': self.QA_PROMPT})
+        chain = ConversationalRetrievalChain.from_llm(
+            llm=llm,
+            retriever=retriever, 
+            # chain_type="map_reduce",
+            verbose=True, 
+            return_source_documents=True, 
+            max_tokens_limit=4097, 
+            combine_docs_chain_kwargs={'prompt': self.QA_PROMPT})
 
         chain_input = {"question": query, "chat_history": st.session_state["history"]}
         result = chain(chain_input)
 
         st.session_state["history"].append((query, result["answer"]))
+
+        end_time = time.time()
+        execution_time = end_time - start_time
         #count_tokens_chain(chain, chain_input)
-        return result["answer"]
+        return (
+            result["answer"]
+            + "\n["
+            + f"Query time: {execution_time:.4f} seconds"
+            + "]\n"
+            # + "\n".join(map(str, result['source_documents']))
+        )
 
 
 def count_tokens_chain(chain, query):

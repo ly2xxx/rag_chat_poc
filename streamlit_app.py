@@ -64,9 +64,9 @@ hide_pages(["down"])
 with st.sidebar.expander("📬 Contact"):
 
     st.write("**GitHub:**",
-"[jupyter notebook demo](https://github.com/ly2xxx/py_playground/blob/main/mistralai-cpu.ipynb)")
+"[Open-Source LLM solution](https://github.com/ly2xxx/rag_chat_opensource_llm/)")
 
-    st.write("**Medium:** "
+    st.write("**Blog:** "
 "[@ly2xxx](https://edisonideas.wordpress.com/)")
 
     # st.write("**Twitter:** [@yvann_hub](https://twitter.com/yvann_hub)")
