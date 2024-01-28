@@ -61,7 +61,7 @@ class Chatbot:
             result["answer"]
             + "\n["
             + f"Query time: {execution_time:.4f} seconds"
-            + "]\n"
+            + "]\n "
             # + "\n".join(map(str, result['source_documents']))
         )
 
