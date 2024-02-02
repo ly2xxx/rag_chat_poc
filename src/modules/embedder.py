@@ -1,6 +1,7 @@
 import os
 import pickle
 import tempfile
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -55,7 +56,10 @@ class Embedder:
             loader = TextLoader(file_path=tmp_file_path, encoding="utf-8")
             data = loader.load_and_split(text_splitter)
             
-        embeddings = OpenAIEmbeddings()
+        # embeddings = OpenAIEmbeddings(model="all-MiniLM-L6-v2-f16.gguf")
+
+        modelPath = "all-MiniLM-L6-v2"
+        embeddings = HuggingFaceEmbeddings(model_name=modelPath)
 
         vectors = FAISS.from_documents(data, embeddings)
         os.remove(tmp_file_path)

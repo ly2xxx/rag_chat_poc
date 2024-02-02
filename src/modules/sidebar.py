@@ -1,4 +1,5 @@
 import streamlit as st
+import dotenv
 
 class Sidebar:
 
@@ -7,6 +8,9 @@ class Sidebar:
     TEMPERATURE_MAX_VALUE = 1.0
     TEMPERATURE_DEFAULT_VALUE = 0.0
     TEMPERATURE_STEP = 0.01
+
+    #load environment variables from .env file
+    dotenv.load_dotenv()
 
     @staticmethod
     def about():
