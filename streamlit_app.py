@@ -162,7 +162,7 @@ st.markdown(
     <br>
     <h8>
     🚀 January 2024 - discovery: OpenAI's language models understand and generate texts in multiple languages, enabling cross-lingual communication and versatile applications. 
-    <a href="https://media.licdn.com/dms/image/D4E2CAQEQhEyFeV6GLw/comment-image-shrink_8192_1280/0/1704827136134?e=1706140800&v=beta&t=Qh4o9wbA50E2Q1PAZiju-PMlmkFqNNMJ7EprNvzygJ0">Proof of uploaded PDF in English, queried in Chinese</a>
+    <!--<a href="https://media.licdn.com/dms/image/D4E2CAQEQhEyFeV6GLw/comment-image-shrink_8192_1280/0/1704827136134?e=1706140800&v=beta&t=Qh4o9wbA50E2Q1PAZiju-PMlmkFqNNMJ7EprNvzygJ0">Proof of uploaded PDF in English, queried in Chinese</a>-->
     </h8>
     <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
