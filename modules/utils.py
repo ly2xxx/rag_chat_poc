@@ -7,6 +7,7 @@ from modules.chatbot import Chatbot
 from modules.embedder import Embedder
 import requests
 from bs4 import BeautifulSoup
+import dotenv
 
 class Utilities:
 
@@ -19,8 +20,10 @@ class Utilities:
         if not hasattr(st.session_state, "api_key"):
             st.session_state.api_key = None
         #you can define your API key in .env directly
+        #load environment variables from .env file
+        dotenv.load_dotenv()
         if os.path.exists(".env") and os.environ.get("OPENAI_API_KEY") is not None:
-            user_api_key = os.environ["OPENAI_API_KEY"]
+            user_api_key = os.getenv("OPENAI_API_KEY").strip()
             st.sidebar.success("API key loaded from .env", icon="🚀")
         else:
             if st.session_state.api_key is not None:
