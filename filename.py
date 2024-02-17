@@ -30,7 +30,7 @@ def update():
     st.session_state.df = st.session_state.df[st.session_state.df.Select]
 
 st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
-query = st.text_input('', help='Enter the search string and hit Enter/Return')
+query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if query: #Activates the code below on hitting Enter/Return in the search textbox
