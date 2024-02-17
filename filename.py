@@ -3,6 +3,32 @@ from bs4 import BeautifulSoup
 import requests as r
 import streamlit as st
 
+#https://docs.streamlit.io/library/api-reference/data/st.dataframe
+#https://docs.streamlit.io/library/api-reference/data/st.data_editor
+#https://docs.streamlit.io/library/api-reference/data/st.column_config
+#https://github.com/streamlit/streamlit/issues/7749
+#https://docs.streamlit.io/knowledge-base/using-streamlit/how-to-get-row-selections
+def dataframe_with_selections(df):
+    df_with_selections = df.copy()
+    df_with_selections.insert(0, "Select", False)
+    st.session_state.df = df_with_selections
+
+    # Get dataframe row-selections from user with st.data_editor
+    edited_df = st.data_editor(
+        df_with_selections,
+        hide_index=True,
+        column_config={"Select": st.column_config.CheckboxColumn(required=True)},
+        disabled=df.columns,
+        # on_change=update()
+    )
+
+    # Filter the dataframe using the temporary column, then drop the column
+    selected_rows = edited_df#[edited_df.Select]
+    return selected_rows.drop('Select', axis=1)
+
+def update():
+    st.session_state.df = st.session_state.df[st.session_state.df.Select]
+
 st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
 query = st.text_input('', help='Enter the search string and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
@@ -59,4 +85,9 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
     st.markdown(f'{count_str}', unsafe_allow_html=True)
     st.markdown(f'{result_str}', unsafe_allow_html=True)
     st.markdown('<h3>Data Frame of the above search result</h3>', unsafe_allow_html=True)
-    st.dataframe(result_df)
+    # result_df.insert(loc = 0,column = 'Select',value = '<input type="checkbox" />')
+    # st.dataframe(result_df)
+    
+    selection = dataframe_with_selections(result_df)
+    st.write("Your selection:")
+    st.write(selection)
