@@ -8,6 +8,7 @@ import streamlit as st
 #https://docs.streamlit.io/library/api-reference/data/st.column_config
 #https://github.com/streamlit/streamlit/issues/7749
 #https://docs.streamlit.io/knowledge-base/using-streamlit/how-to-get-row-selections
+#https://discuss.streamlit.io/t/how-to-prevent-the-reloading-of-the-whole-page-when-i-let-the-user-to-perform-an-action/10800/15
 def dataframe_with_selections(df):
     # df_with_selections = df.copy()
     # df_with_selections.insert(0, "Select", False)
@@ -35,17 +36,14 @@ def dataframe_with_selections(df):
     # for row in edited_df.iterrows():
     #     if row['Select'] == False:
     #         selected_rows.drop(row)
-    return selected_rows#.drop('Select', axis=1)
+    return selected_rows.drop('Select', axis=1)
 
 def update():
     print("update is called")
     # st.session_state.df = st.session_state.df[st.session_state.df.Select]
 
-st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
-query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
-query = query.replace(" ", "+") #replacing the spaces in query result with +
-print("query is called")
-if query: #Activates the code below on hitting Enter/Return in the search textbox
+@st.cache_data
+def bing_search(query):
     try:#Exception handling 
         #https://www.bing.com/search?q={query}
         #https://www.google.co.uk/search?q={query}
@@ -70,7 +68,7 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
                 description = "" if individual_search_result.find('p') is None else individual_search_result.find('p').text
                 #Appending the result data frame after processing each individual search result
                 # result_df = result_df.append(pd.DataFrame({"Title": url_txt, "URL": href, "Description": description}, index=[n]))
-                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Pick":True, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
+                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
                 count_str = f'<b style="font-size:20px;">Bing Search returned {len(result_df)} results</b>'
                 ########################################################
                 ######### HTML code to display search results ##########
@@ -80,6 +78,8 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
                 f'<tr style="border: none;">{description}</tr>'+\
                 f'<tr style="border: none;"><td style="border: none;"></td></tr>'
             result_str += '</table></html>'
+
+            st.session_state['keyword'] = query
             
         #if the status code of the request isn't 200, then an error message is displayed along with an empty data frame        
         else:
@@ -92,15 +92,24 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
         st.error(f"Error: {str(e)}")
         result_df = pd.DataFrame({"Title": "", "URL": "", "Description": ""}, index=[0])
         result_str = '<html></html>'
-        count_str = '<b style="font-size:20px;">Looks like an error!!</b>'
-    
+        count_str = '<b style="font-size:20px;">Looks like an error!!</b>'  
+
     st.markdown(f'{count_str}', unsafe_allow_html=True)
     st.markdown(f'{result_str}', unsafe_allow_html=True)
     st.markdown('<h3>Data Frame of the above search result</h3>', unsafe_allow_html=True)
     # result_df.insert(loc = 0,column = 'Select',value = '<input type="checkbox" />')
     # st.dataframe(result_df)
-    
-    selection = dataframe_with_selections(result_df)
-    st.write("Your selection:")
-    st.write(selection)
-    # st.session_state["keyword_selections"] = selection#.get["URL"]
+    return result_df  
+
+st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
+query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
+query = query.replace(" ", "+") #replacing the spaces in query result with +
+
+if len(query.strip())>0 and (('keyword' not in st.session_state) or (query != st.session_state['keyword'])): #Activates the code below on hitting Enter/Return in the search textbox
+    print("query is called with keyword: " + query)
+    result_df = bing_search(query)
+
+selection = dataframe_with_selections(result_df)
+st.write("Your selection:")
+st.write(selection)
+# st.session_state["keyword_selections"] = selection#.get["URL"]
