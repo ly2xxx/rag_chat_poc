@@ -9,25 +9,37 @@ import streamlit as st
 #https://github.com/streamlit/streamlit/issues/7749
 #https://docs.streamlit.io/knowledge-base/using-streamlit/how-to-get-row-selections
 def dataframe_with_selections(df):
-    df_with_selections = df.copy()
-    df_with_selections.insert(0, "Select", False)
-    st.session_state.df = df_with_selections
+    # df_with_selections = df.copy()
+    # df_with_selections.insert(0, "Select", False)
+    # st.session_state["keyword_results"] = df
+    # st.session_state["keyword_selections"] = df_with_selections
 
     # Get dataframe row-selections from user with st.data_editor
     edited_df = st.data_editor(
-        df_with_selections,
-        hide_index=True,
-        column_config={"Select": st.column_config.CheckboxColumn(required=True)},
-        disabled=df.columns,
+        df,# df_with_selections,
+        hide_index=False,
+        # column_config={"Select": st.column_config.CheckboxColumn(required=True)},
+        # key="Select",
+        # disabled=df.columns,
         # on_change=update()
     )
 
+    # Iterate through the rows and set Select=True for selected rows
+    for index, row in edited_df.iterrows():
+        if row['Select']:
+        # if index % 2 == 0:
+            edited_df.at[index, 'Select'] = True
+
     # Filter the dataframe using the temporary column, then drop the column
-    selected_rows = edited_df#[edited_df.Select]
-    return selected_rows.drop('Select', axis=1)
+    selected_rows = edited_df[edited_df['Select']]
+    # for row in edited_df.iterrows():
+    #     if row['Select'] == False:
+    #         selected_rows.drop(row)
+    return selected_rows#.drop('Select', axis=1)
 
 def update():
-    st.session_state.df = st.session_state.df[st.session_state.df.Select]
+    print("update is called")
+    # st.session_state.df = st.session_state.df[st.session_state.df.Select]
 
 st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
 query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
@@ -58,7 +70,7 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
                 description = "" if individual_search_result.find('p') is None else individual_search_result.find('p').text
                 #Appending the result data frame after processing each individual search result
                 # result_df = result_df.append(pd.DataFrame({"Title": url_txt, "URL": href, "Description": description}, index=[n]))
-                result_df = pd.concat([result_df, pd.DataFrame({"Title": url_txt, "URL": href, "Description": description}, index=[n])])
+                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
                 count_str = f'<b style="font-size:20px;">Bing Search returned {len(result_df)} results</b>'
                 ########################################################
                 ######### HTML code to display search results ##########
@@ -91,3 +103,4 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
     selection = dataframe_with_selections(result_df)
     st.write("Your selection:")
     st.write(selection)
+    # st.session_state["keyword_selections"] = selection#.get["URL"]
