@@ -25,10 +25,10 @@ def dataframe_with_selections(df):
     )
 
     # Iterate through the rows and set Select=True for selected rows
-    for index, row in edited_df.iterrows():
-        if row['Select']:
-        # if index % 2 == 0:
-            edited_df.at[index, 'Select'] = True
+    # for index, row in edited_df.iterrows():
+    #     if row['Select']:
+    #     # if index % 2 == 0:
+    #         edited_df.at[index, 'Select'] = True
 
     # Filter the dataframe using the temporary column, then drop the column
     selected_rows = edited_df[edited_df['Select']]
@@ -44,7 +44,7 @@ def update():
 st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
 query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
-
+print("query is called")
 if query: #Activates the code below on hitting Enter/Return in the search textbox
     try:#Exception handling 
         #https://www.bing.com/search?q={query}
@@ -70,7 +70,7 @@ if query: #Activates the code below on hitting Enter/Return in the search textbo
                 description = "" if individual_search_result.find('p') is None else individual_search_result.find('p').text
                 #Appending the result data frame after processing each individual search result
                 # result_df = result_df.append(pd.DataFrame({"Title": url_txt, "URL": href, "Description": description}, index=[n]))
-                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
+                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Pick":True, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
                 count_str = f'<b style="font-size:20px;">Bing Search returned {len(result_df)} results</b>'
                 ########################################################
                 ######### HTML code to display search results ##########
