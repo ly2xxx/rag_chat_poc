@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import requests as r
 import streamlit as st
 
+CONST_CHECKBOX_COLUMN = 'Select'
+
 #https://docs.streamlit.io/library/api-reference/data/st.dataframe
 #https://docs.streamlit.io/library/api-reference/data/st.data_editor
 #https://docs.streamlit.io/library/api-reference/data/st.column_config
@@ -32,11 +34,11 @@ def dataframe_with_selections(df):
     #         edited_df.at[index, 'Select'] = True
 
     # Filter the dataframe using the temporary column, then drop the column
-    selected_rows = edited_df[edited_df['Select']]
+    selected_rows = edited_df[edited_df[CONST_CHECKBOX_COLUMN]]
     # for row in edited_df.iterrows():
     #     if row['Select'] == False:
     #         selected_rows.drop(row)
-    return selected_rows.drop('Select', axis=1)
+    return selected_rows.drop(CONST_CHECKBOX_COLUMN, axis=1)
 
 def update():
     print("update is called")
@@ -68,7 +70,7 @@ def bing_search(query):
                 description = "" if individual_search_result.find('p') is None else individual_search_result.find('p').text
                 #Appending the result data frame after processing each individual search result
                 # result_df = result_df.append(pd.DataFrame({"Title": url_txt, "URL": href, "Description": description}, index=[n]))
-                result_df = pd.concat([result_df, pd.DataFrame({"Select":False, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
+                result_df = pd.concat([result_df, pd.DataFrame({CONST_CHECKBOX_COLUMN:False, "Title": url_txt, "URL": href, "Description": description}, index=[n])])
                 count_str = f'<b style="font-size:20px;">Bing Search returned {len(result_df)} results</b>'
                 ########################################################
                 ######### HTML code to display search results ##########
@@ -78,9 +80,7 @@ def bing_search(query):
                 f'<tr style="border: none;">{description}</tr>'+\
                 f'<tr style="border: none;"><td style="border: none;"></td></tr>'
             result_str += '</table></html>'
-
             st.session_state['keyword'] = query
-            
         #if the status code of the request isn't 200, then an error message is displayed along with an empty data frame        
         else:
             result_df = pd.DataFrame({"Title": "", "URL": "", "Description": ""}, index=[0])
@@ -101,15 +101,19 @@ def bing_search(query):
     # st.dataframe(result_df)
     return result_df  
 
-st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Search Engine Scraper</h1>', unsafe_allow_html=True)
+st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Keyword Research</h1>', unsafe_allow_html=True)
 query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
+result_df=pd.Series([])
 if len(query.strip())>0 and (('keyword' not in st.session_state) or (query != st.session_state['keyword'])): #Activates the code below on hitting Enter/Return in the search textbox
     print("query is called with keyword: " + query)
     result_df = bing_search(query)
 
-selection = dataframe_with_selections(result_df)
-st.write("Your selection:")
-st.write(selection)
-# st.session_state["keyword_selections"] = selection#.get["URL"]
+# if result_df.empty:
+#     st.write("Press 'Enter'")
+# else:
+    selection = dataframe_with_selections(result_df)
+    st.write("Your selection:")
+    st.write(selection)
+    # st.session_state["keyword_selections"] = selection#.get["URL"]
