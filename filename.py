@@ -101,8 +101,8 @@ def bing_search(query):
     # st.dataframe(result_df)
     return result_df  
 
-st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Keyword Research</h1>', unsafe_allow_html=True)
-query = st.text_input('', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
+# st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Keyword Research</h1>', unsafe_allow_html=True)
+query = st.text_input('Keyword(s) Research:', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 result_df=pd.Series([])
