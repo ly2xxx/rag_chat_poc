@@ -5,50 +5,21 @@ import streamlit as st
 
 CONST_CHECKBOX_COLUMN = 'Select'
 
-#https://docs.streamlit.io/library/api-reference/data/st.dataframe
-#https://docs.streamlit.io/library/api-reference/data/st.data_editor
-#https://docs.streamlit.io/library/api-reference/data/st.column_config
-#https://github.com/streamlit/streamlit/issues/7749
-#https://docs.streamlit.io/knowledge-base/using-streamlit/how-to-get-row-selections
-#https://discuss.streamlit.io/t/how-to-prevent-the-reloading-of-the-whole-page-when-i-let-the-user-to-perform-an-action/10800/15
 def dataframe_with_selections(df):
-    # df_with_selections = df.copy()
-    # df_with_selections.insert(0, "Select", False)
-    # st.session_state["keyword_results"] = df
-    # st.session_state["keyword_selections"] = df_with_selections
-
     # Get dataframe row-selections from user with st.data_editor
     edited_df = st.data_editor(
-        df,# df_with_selections,
+        df,
         hide_index=False,
-        # column_config={"Select": st.column_config.CheckboxColumn(required=True)},
-        # key="Select",
-        # disabled=df.columns,
-        # on_change=update()
     )
-
-    # Iterate through the rows and set Select=True for selected rows
-    # for index, row in edited_df.iterrows():
-    #     if row['Select']:
-    #     # if index % 2 == 0:
-    #         edited_df.at[index, 'Select'] = True
 
     # Filter the dataframe using the temporary column, then drop the column
     selected_rows = edited_df[edited_df[CONST_CHECKBOX_COLUMN]]
-    # for row in edited_df.iterrows():
-    #     if row['Select'] == False:
-    #         selected_rows.drop(row)
-    return selected_rows.drop(CONST_CHECKBOX_COLUMN, axis=1)
 
-def update():
-    print("update is called")
-    # st.session_state.df = st.session_state.df[st.session_state.df.Select]
+    return selected_rows.drop(CONST_CHECKBOX_COLUMN, axis=1)
 
 @st.cache_data
 def bing_search(query):
-    try:#Exception handling 
-        #https://www.bing.com/search?q={query}
-        #https://www.google.co.uk/search?q={query}
+    try:
         req = r.get(f"https://www.bing.com/search?q={query}",
                     headers = {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"})
         result_str = '<html><table style="border: none;">' #Initializing the HTML code for displaying search results
@@ -97,11 +68,9 @@ def bing_search(query):
     st.markdown(f'{count_str}', unsafe_allow_html=True)
     st.markdown(f'{result_str}', unsafe_allow_html=True)
     st.markdown('<h3>Data Frame of the above search result</h3>', unsafe_allow_html=True)
-    # result_df.insert(loc = 0,column = 'Select',value = '<input type="checkbox" />')
-    # st.dataframe(result_df)
+
     return result_df  
 
-# st.markdown('<h1 style="background-color: gainsboro; padding-left: 10px; padding-bottom: 20px;">Keyword Research</h1>', unsafe_allow_html=True)
 query = st.text_input('Keyword(s) Research:', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
@@ -110,10 +79,11 @@ if len(query.strip())>0 and (('keyword' not in st.session_state) or (query != st
     print("query is called with keyword: " + query)
     result_df = bing_search(query)
 
-# if result_df.empty:
-#     st.write("Press 'Enter'")
-# else:
-    selection = dataframe_with_selections(result_df)
-    st.write("Your selection:")
-    st.write(selection)
-    # st.session_state["keyword_selections"] = selection#.get["URL"]
+    if not result_df.empty:
+        selection = dataframe_with_selections(result_df)
+        st.write("Your selection:")
+        st.write(selection)
+    else:
+        st.write("No results found. Please try a different search query.")
+
+# st.session_state["keyword_selections"] = selection#.get["URL"]
