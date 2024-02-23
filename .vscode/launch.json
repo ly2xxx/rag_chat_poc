@@ -24,12 +24,14 @@
             "type": "debugpy",
             "request": "launch",
             "module": "streamlit",
+            "python": "c:/code/rag_chat_poc_openai/.venv11/Scripts/python.exe",
             "args": [
                  "run",
                  "filename.py",
                  "--server.port",
                  "8508"
             ]
+            
         }
     ]
     
