@@ -72,7 +72,7 @@ def bing_search(query):
 
     return result_df  
 
-query = st.text_input('Keyword(s) Research:', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
+query = st.text_input('Keywords Research (To resolve search result issues, use "+" to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if len(query.strip())>0:
