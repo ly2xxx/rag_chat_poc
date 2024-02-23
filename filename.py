@@ -82,7 +82,7 @@ if len(query.strip())>0:
     if not query_result.empty:
         selection = dataframe_with_selections(query_result)
         st.write("Your selection:")
-        st.write(selection)
+        st.table(selection)
         st.session_state["keyword_selections"] = selection['URL'].to_list()
         print(st.session_state["keyword_selections"])
     else:
