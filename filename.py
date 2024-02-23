@@ -19,6 +19,7 @@ def dataframe_with_selections(df):
 
 @st.cache_data
 def bing_search(query):
+    # result_df=pd.Series([])
     try:
         req = r.get(f"https://www.bing.com/search?q={query}",
                     headers = {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"})
@@ -51,7 +52,7 @@ def bing_search(query):
                 f'<tr style="border: none;">{description}</tr>'+\
                 f'<tr style="border: none;"><td style="border: none;"></td></tr>'
             result_str += '</table></html>'
-            st.session_state['keyword'] = query
+
         #if the status code of the request isn't 200, then an error message is displayed along with an empty data frame        
         else:
             result_df = pd.DataFrame({"Title": "", "URL": "", "Description": ""}, index=[0])
@@ -74,16 +75,15 @@ def bing_search(query):
 query = st.text_input('Keyword(s) Research:', placeholder="Enter Search keyword(s)", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
-result_df=pd.Series([])
-if len(query.strip())>0 and (('keyword' not in st.session_state) or (query != st.session_state['keyword'])): #Activates the code below on hitting Enter/Return in the search textbox
+if len(query.strip())>0:
     print("query is called with keyword: " + query)
-    result_df = bing_search(query)
+    query_result = bing_search(query)
 
-    if not result_df.empty:
-        selection = dataframe_with_selections(result_df)
+    if not query_result.empty:
+        selection = dataframe_with_selections(query_result)
         st.write("Your selection:")
         st.write(selection)
+        st.session_state["keyword_selections"] = selection['URL'].to_list()
+        print(st.session_state["keyword_selections"])
     else:
         st.write("No results found. Please try a different search query.")
-
-# st.session_state["keyword_selections"] = selection#.get["URL"]
