@@ -129,7 +129,7 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-query = st.text_input('Keywords Research (To resolve search result issues, use " + " to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return', on_change=input_callback)
+query = st.text_input('(use "+" to connect keywords, to resolve UnboundLocalError copy the search string from Bing url):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return', on_change=input_callback)
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if len(query.strip())>0:
