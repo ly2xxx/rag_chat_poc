@@ -32,6 +32,10 @@ def generate_filename(query_keywords):
     
     return filename
 
+def input_callback():
+    st.session_state["reset_chat"] = True
+    st.session_state["keysearch_ready"]=False
+
 def dataframe_with_selections(df):
     # Get dataframe row-selections from user with st.data_editor
     edited_df = st.data_editor(
@@ -122,7 +126,7 @@ if not user_api_key:
 else:
     os.environ["OPENAI_API_KEY"] = user_api_key
 
-query = st.text_input('Keywords Research (To resolve search result issues, use " + " to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return')
+query = st.text_input('Keywords Research (To resolve search result issues, use " + " to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return', on_change=input_callback)
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if len(query.strip())>0:
