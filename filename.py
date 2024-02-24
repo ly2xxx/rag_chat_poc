@@ -1,9 +1,36 @@
+import os
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests as r
 import streamlit as st
+from io import StringIO
+from modules.history import ChatHistory
+from modules.layout import Layout
+from modules.utils import Utilities
+from modules.sidebar import Sidebar
+from datetime import datetime
+from st_pages import hide_pages
 
 CONST_CHECKBOX_COLUMN = 'Select'
+
+#To be able to update the changes made to modules in localhost (press r)
+def reload_module(module_name):
+    import importlib
+    import sys
+    if module_name in sys.modules:
+        importlib.reload(sys.modules[module_name])
+    return sys.modules[module_name]
+
+def generate_filename(query_keywords):
+    domain = query_keywords.replace(" ", "_").replace("+","_")
+
+    # Format the current date
+    current_date = datetime.now().strftime("%d%m%Y")
+    
+    # Concatenate the parts to create the filename
+    filename = f"{domain}-{current_date}"
+    
+    return filename
 
 def dataframe_with_selections(df):
     # Get dataframe row-selections from user with st.data_editor
@@ -72,7 +99,30 @@ def bing_search(query):
 
     return result_df  
 
-query = st.text_input('Keywords Research (To resolve search result issues, use "+" to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return')
+hide_pages(["down"])
+history_module = reload_module('modules.history')
+layout_module = reload_module('modules.layout')
+utils_module = reload_module('modules.utils')
+sidebar_module = reload_module('modules.sidebar')
+
+ChatHistory = history_module.ChatHistory
+Layout = layout_module.Layout
+Utilities = utils_module.Utilities
+Sidebar = sidebar_module.Sidebar
+
+# Instantiate the main components
+layout, sidebar, utils = Layout(), Sidebar(), Utilities()
+
+# layout.show_header("Keywords")
+
+user_api_key = utils.load_api_key()
+
+if not user_api_key:
+    layout.show_api_key_missing()
+else:
+    os.environ["OPENAI_API_KEY"] = user_api_key
+
+query = st.text_input('Keywords Research (To resolve search result issues, use " + " to connect keywords):', placeholder="Enter Search keyword(s), for example: movie+review", help='Enter the search keywords and hit Enter/Return')
 query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if len(query.strip())>0:
@@ -87,3 +137,32 @@ if len(query.strip())>0:
         print(st.session_state["keyword_selections"])
     else:
         st.write("No results found. Please try a different search query.")
+
+    if st.button("Submit for chatbot research") or st.session_state["keysearch_ready"]:
+        web_context = utils.handle_webloads(st.session_state["keyword_selections"])
+
+        if web_context:
+
+            # Configure the sidebar
+            sidebar.show_options()
+            sidebar.about()
+
+            # Initialize chat history
+            history = ChatHistory()
+            try:
+                uploaded_file = StringIO(web_context)
+
+                web_context = web_context.strip()
+
+                uploaded_file.name = generate_filename(query)+".txt"
+
+                chatbot = utils.setup_chatbot(
+                    uploaded_file, st.session_state["model"], st.session_state["temperature"], ".pkl".lower() in web_context.lower()
+                )
+
+                st.session_state["keysearch_ready"] = utils.setup_conversation_cockpit(layout, sidebar, history, uploaded_file, chatbot)
+                
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+    # elif st.session_state["ready"]:
+    #     utils.setup_conversation_cockpit(layout, sidebar, history, uploaded_file, chatbot)
