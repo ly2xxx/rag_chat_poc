@@ -164,5 +164,5 @@ if len(query.strip())>0:
                 
             except Exception as e:
                 st.error(f"Error: {str(e)}")
-    # elif st.session_state["ready"]:
-    #     utils.setup_conversation_cockpit(layout, sidebar, history, uploaded_file, chatbot)
+else:
+    st.session_state["keysearch_ready"]=False
