@@ -21,14 +21,17 @@ def reload_module(module_name):
         importlib.reload(sys.modules[module_name])
     return sys.modules[module_name]
 
-def generate_filename(query_keywords):
+def generate_filename(query_keywords, web_context):
     domain = query_keywords.replace(" ", "_").replace("+","_")
 
     # Format the current date
     current_date = datetime.now().strftime("%d%m%Y")
+
+    # Content size
+    content_size = len(web_context)
     
     # Concatenate the parts to create the filename
-    filename = f"{domain}-{current_date}"
+    filename = f"{domain}-{current_date}-{content_size}"
     
     return filename
 
@@ -158,10 +161,10 @@ if len(query.strip())>0:
 
                 web_context = web_context.strip()
 
-                uploaded_file.name = generate_filename(query)+".txt"
+                uploaded_file.name = generate_filename(query, web_context)+".txt"
 
                 chatbot = utils.setup_chatbot(
-                    uploaded_file, st.session_state["model"], st.session_state["temperature"], ".pkl".lower() in web_context.lower()
+                    uploaded_file, st.session_state["model"], st.session_state["temperature"]
                 )
 
                 st.session_state["keysearch_ready"] = utils.setup_conversation_cockpit(layout, sidebar, history, uploaded_file, chatbot)
