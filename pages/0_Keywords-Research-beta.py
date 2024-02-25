@@ -10,6 +10,7 @@ from modules.utils import Utilities
 from modules.sidebar import Sidebar
 from datetime import datetime
 from st_pages import hide_pages
+import re
 
 CONST_CHECKBOX_COLUMN = 'Select'
 
@@ -55,7 +56,11 @@ def dataframe_with_selections(df):
 def bing_search(query):
     # result_df=pd.Series([])
     try:
-        req = r.get(f"https://www.bing.com/search?q={query}",
+        if query.startswith("https://www.bing.com"):
+            query_url = query
+        else:
+            query_url = f"https://www.bing.com/search?q={query}"
+        req = r.get(query_url,
                     headers = {"user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"})
         result_str = '<html><table style="border: none;">' #Initializing the HTML code for displaying search results
         
@@ -65,6 +70,12 @@ def bing_search(query):
             search_result = [str(i).replace("<strong>","") for i in search_result] #removing the <strong> tag
             search_result = [str(i).replace("</strong>","") for i in search_result] #removing the </strong> tag
             result_df = pd.DataFrame() #Initializing the data frame that stores the results
+            pattern = r"q=([^&]+)" 
+            match = re.search(pattern, query_url)
+            if match:
+                query_string = match.group(1)
+            else:
+                query_string = query
             
             for n,i in enumerate(search_result): #iterating through the search results
                 individual_search_result = BeautifulSoup(i, features="html.parser") #converting individual search result into a BeautifulSoup object
@@ -104,7 +115,7 @@ def bing_search(query):
     st.markdown(f'{result_str}', unsafe_allow_html=True)
     st.markdown('<h3>Data Frame of the above search result</h3>', unsafe_allow_html=True)
 
-    return result_df  
+    return result_df, query_string
 
 hide_pages(["down"])
 history_module = reload_module('modules.history')
@@ -134,7 +145,7 @@ query = query.replace(" ", "+") #replacing the spaces in query result with +
 
 if len(query.strip())>0:
     print("query is called with keyword: " + query)
-    query_result = bing_search(query)
+    query_result, query_str = bing_search(query)
 
     if not query_result.empty:
         selection = dataframe_with_selections(query_result)
@@ -161,7 +172,7 @@ if len(query.strip())>0:
 
                 web_context = web_context.strip()
 
-                uploaded_file.name = generate_filename(query, web_context)+".txt"
+                uploaded_file.name = generate_filename(query_str, web_context)+".txt"
 
                 chatbot = utils.setup_chatbot(
                     uploaded_file, st.session_state["model"], st.session_state["temperature"]
