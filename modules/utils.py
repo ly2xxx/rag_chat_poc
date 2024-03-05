@@ -56,6 +56,7 @@ class Utilities:
                 uploaded_file.seek(0)
                 shows = pd.read_csv(uploaded_file)
                 file_container.write(shows)
+                return shows
 
             def show_pdf_file(uploaded_file):
                 file_container = st.expander("Your PDF file :")
@@ -64,25 +65,42 @@ class Utilities:
                     for page in pdf.pages:
                         pdf_text += page.extract_text() + "\n\n"
                 file_container.write(pdf_text)
+                return pdf_text
             
             def show_txt_file(uploaded_file):
                 file_container = st.expander("Your TXT file:")
                 uploaded_file.seek(0)
                 content = uploaded_file.read().decode("utf-8")
                 file_container.write(content)
+                return content
             
             def get_file_extension(uploaded_file):
                 return os.path.splitext(uploaded_file)[1].lower()
             
+            def get_file_name(uploaded_file):
+                return os.path.splitext(uploaded_file)[0].lower()
+            
+            file_name = get_file_name(uploaded_file.name)
             file_extension = get_file_extension(uploaded_file.name)
 
             # Show the contents of the file based on its extension
             if file_extension == ".csv" :
-                show_csv_file(uploaded_file)
+                txt = show_csv_file(uploaded_file)
             elif file_extension== ".pdf" : 
-                show_pdf_file(uploaded_file)
+                txt = show_pdf_file(uploaded_file)
             elif file_extension== ".txt" : 
-                show_txt_file(uploaded_file)
+                txt = show_txt_file(uploaded_file)
+
+            try:
+                txt_data=txt.encode()
+                st.download_button(
+                    label="Download RAW content",
+                    data=txt_data,
+                    file_name=file_name + ".txt",
+                    mime="text/plain"
+            )
+            except Exception as e:
+                print(f"Warning - not able to offer the download RAW content: {e}")
 
         else:
             st.session_state["reset_chat"] = True
