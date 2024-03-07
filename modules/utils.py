@@ -40,6 +40,18 @@ class Utilities:
 
         return user_api_key
 
+    @staticmethod
+    def downloadRawContent(file_name, txt):
+        try:
+            txt_data=txt.encode()
+            st.download_button(
+                    label="Download RAW content",
+                    data=txt_data,
+                    file_name=file_name + ".txt",
+                    mime="text/plain"
+            )
+        except Exception as e:
+            print(f"Warning - not able to offer the download RAW content: {e}")
     
     @staticmethod
     def handle_upload(file_types):
@@ -91,16 +103,7 @@ class Utilities:
             elif file_extension== ".txt" : 
                 txt = show_txt_file(uploaded_file)
 
-            try:
-                txt_data=txt.encode()
-                st.download_button(
-                    label="Download RAW content",
-                    data=txt_data,
-                    file_name=file_name + ".txt",
-                    mime="text/plain"
-            )
-            except Exception as e:
-                print(f"Warning - not able to offer the download RAW content: {e}")
+            Utilities.downloadRawContent(file_name, txt)
 
         else:
             st.session_state["reset_chat"] = True
@@ -109,7 +112,7 @@ class Utilities:
         return uploaded_file
     
     @staticmethod
-    def handle_webload(url):
+    def handle_webload(url, filename="raw"):
             """
             Handles and displays content from a web page
             :param url: URL of the web page to load
@@ -133,6 +136,8 @@ class Utilities:
                 # content = uploaded_file.read().decode("utf-8")
                 file_container.write(text_content)
 
+                Utilities.downloadRawContent(filename, text_content)
+
                 return text_content
 
             except Exception as e:
@@ -140,7 +145,7 @@ class Utilities:
                 return url
             
     @staticmethod
-    def handle_webloads(urls):
+    def handle_webloads(urls, filename="raw"):
         """
         Handles and displays content from a list of web pages
         :param urls: List of URLs to load
@@ -162,8 +167,14 @@ class Utilities:
 
             # Output the text content
             file_container = st.expander("Your web pages:")
+            text = ""
             for i, content in enumerate(text_content):
-                file_container.write(f"{i+1}.{urls[i]}. {content}")
+                section = f"{i+1}.{urls[i]}. {content}"
+                file_container.write(section)
+                text += '\n\n\n'+section
+
+            # Download the contents of the file_container as a file
+            Utilities.downloadRawContent(filename, text)
 
             return '\n'.join(text_content)
 

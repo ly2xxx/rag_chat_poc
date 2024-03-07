@@ -75,7 +75,7 @@ else:
 
     web_url = st.text_input(placeholder="Enter Website URL", label_visibility="hidden", label =" ", on_change=input_callback)
     if len(web_url) > 0:
-        web_context = utils.handle_webload(web_url)
+        web_context = utils.handle_webload(web_url, generate_filename(web_url))
 
         if web_context:
 
