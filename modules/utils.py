@@ -112,6 +112,22 @@ class Utilities:
         return uploaded_file
     
     @staticmethod
+    def remove_unwanted_tags(soup):
+        # Remove unwanted tags and attributes
+        unwanted_tags = ['script', 'style', 'header', 'footer', 'nav', 'figure', 'figcaption']
+        for tag in unwanted_tags:
+            for element in soup(tag):
+                element.decompose()
+
+        return soup
+    
+    @staticmethod
+    def clean_web_content(html_content):
+        # Remove special characters and keep only alphanumeric, spaces, and certain punctuation
+        clean_text = re.sub(r'[^A-Za-z0-9 \n\.\,\!\?\:\;\-\/\']+', '', str(html_content))
+        return clean_text
+    
+    @staticmethod
     def handle_webload(url, filename="raw"):
             """
             Handles and displays content from a web page
@@ -124,10 +140,10 @@ class Utilities:
                 response.raise_for_status()  # Raise an exception for bad responses
 
                 # Use BeautifulSoup to parse the HTML content
-                soup = BeautifulSoup(response.text, 'html.parser')
+                soup = Utilities.remove_unwanted_tags(BeautifulSoup(response.text, 'html.parser'))
 
                 # Extract text content from the HTML
-                text_content = soup.get_text(separator='\n', strip=True)
+                text_content = Utilities.clean_web_content(soup.get_text(separator='\n', strip=True))
 
                 # Output the text content
                 # print(text_content)
