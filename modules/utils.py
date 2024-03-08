@@ -124,7 +124,7 @@ class Utilities:
     @staticmethod
     def clean_web_content(html_content):
         # Remove special characters and keep only alphanumeric, spaces, and certain punctuation
-        clean_text = re.sub(r'[^A-Za-z0-9 \n\.\,\!\?\:\;\-\/\']+', '', str(html_content))
+        clean_text = re.sub(r'[^A-Za-z0-9 \n\.\,\!\?\:\;\-\/\'\=\’]+', '', str(html_content))
         return clean_text
     
     @staticmethod
@@ -176,10 +176,10 @@ class Utilities:
                 responses.append(response)
 
             # Use BeautifulSoup to parse the HTML content
-            soups = [BeautifulSoup(response.text, 'html.parser') for response in responses]
+            soups = [Utilities.remove_unwanted_tags(BeautifulSoup(response.text, 'html.parser')) for response in responses]
 
             # Extract text content from the HTML
-            text_content = [soup.get_text(separator='\n', strip=True) for soup in soups]
+            text_content = [Utilities.clean_web_content(soup.get_text(separator='\n', strip=True)) for soup in soups]
 
             # Output the text content
             file_container = st.expander("Your web pages:")
