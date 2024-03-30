@@ -24,6 +24,11 @@ name = "Robby-Summary-youtube"
 icon = "🎬"
 
 [[pages]]
+path = "pages/4_Text-Similarity-beta.py"
+name = "Text-Similarity-score-beta"
+icon = "📚"
+
+[[pages]]
 path = "pages/download.py"
 name = "down"
 icon = "⤓"

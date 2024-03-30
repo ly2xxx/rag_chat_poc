@@ -47,10 +47,11 @@ show_pages(
     [
         Page("./streamlit_app.py", "Home", "🏠"),
         # Can use :<icon-name>: or the actual icon
-        Page("./pages/0_Keywords-Research-beta.py", "Key-Research-beta", "💻"),
+        Page("./pages/0_Keywords-Research-beta.py", "Keywords-Research", "💻"),
         Page("./pages/1_Robby-Chat-file.py", "Robby-Chat-file", "📄"),
         Page("./pages/2_Robby-Chat-web.py", "Robby-Chat-web", "🌐"),
         Page("./pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
+        Page("./pages/4_Text-Similarity-beta.py", "Text-Similarity-score(beta)", "📚"),
         Page("./pages/download.py", "down", "⤓"),
     ]
 )
@@ -101,7 +102,7 @@ def generate_thumbnail(image_path, thumbnail_size=(500, 500)):
 
 mascot_image_file = "Gallery/mascot/01_mascot.jpeg"
 thumbnail = generate_thumbnail(mascot_image_file)
-st.image(thumbnail, caption="Robby", use_column_width=True)
+st.image(thumbnail, caption="Robby(AI generated image)", use_column_width=True)
 
 #Description
 typing_script = """
@@ -169,6 +170,10 @@ st.markdown(
     <h8>
     🚀 February 2024 - added new feature to research multiple sources with keywords. 
     </h8>
+    <br>
+    <h8>
+    🚀 March 2024 - added new feature to calculate two paragraphs' similarity score. 
+    </h8>
     <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
     unsafe_allow_html=True)
@@ -181,7 +186,8 @@ st.write("""
 - **Robby-Chat-file**: General Chat on data (PDF, TXT,CSV) with a [vectorstore](https://github.com/facebookresearch/faiss) (index useful parts(max 4) for respond to the user) | works with [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)
 - **Robby-Chat-web**: General Chat about given website with [langchain-Sitemaploader](https://python.langchain.com/docs/integrations/document_loaders/sitemap) stored in a [vectorstore](https://github.com/facebookresearch/faiss) (index useful parts(max 4) for respond to the user) | works with [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)
 - **Robby-Youtube**: Summarize YouTube videos with [summarize-chain](https://python.langchain.com/en/latest/modules/chains/index_examples/summarize.html)
-- **Keywords-Research(beta)**: Search with Bing and chat about selected web pages [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)         
+- **Keywords-Research**: Search with Bing and chat about selected web pages [ConversationalRetrievalChain](https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html)
+- **Text-Similarity-score(beta)**: Use [Sentence Transformers](https://dev.to/miguelsmuller/comparing-text-similarity-measurement-methods-sentence-transformers-vs-fuzzy-og3) with [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) embeddings, to calculate text(s) similarity score         
 """)
 # st.markdown("""
 # - **Robby-Chat-file**: General Chat on data (PDF, TXT, CSV) with a <a href="https://github.com/facebookresearch/faiss" target="_blank">vectorstore</a> (index useful parts (max 4) for responding to the user) | works with <a href="https://python.langchain.com/en/latest/modules/chains/index_examples/chat_vector_db.html" target="_blank">ConversationalRetrievalChain</a>
