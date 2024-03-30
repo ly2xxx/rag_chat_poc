@@ -15,7 +15,7 @@ from langchain.chat_models import ChatOpenAI
 from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
-hide_pages(["down"])
+hide_pages(["down", "ref"])
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()

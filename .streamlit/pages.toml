@@ -32,3 +32,8 @@ icon = "📚"
 path = "pages/download.py"
 name = "down"
 icon = "⤓"
+
+[[pages]]
+path = "pages/refresh.py"
+name = "ref"
+icon = "🔁"

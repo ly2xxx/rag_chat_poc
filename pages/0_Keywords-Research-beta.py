@@ -117,7 +117,7 @@ def bing_search(query):
 
     return result_df, query_string
 
-hide_pages(["down"])
+hide_pages(["down", "ref"])
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
 utils_module = reload_module('modules.utils')

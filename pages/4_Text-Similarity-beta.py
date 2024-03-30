@@ -2,7 +2,7 @@ import streamlit as st
 from modules.similarity import SimilarityScorer
 from st_pages import hide_pages
 
-hide_pages(["down"])
+hide_pages(["down", "ref"])
 st.title("Text Similarity Calculator")
 
 text1 = st.text_area("Enter first text:", "")

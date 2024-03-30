@@ -53,10 +53,11 @@ show_pages(
         Page("./pages/3_Robby-Youtube.py", "Robby-Summary-youtube", "🎬"),
         Page("./pages/4_Text-Similarity-beta.py", "Text-Similarity-score(beta)", "📚"),
         Page("./pages/download.py", "down", "⤓"),
+        Page("./pages/refresh.py", "ref", "🔁"),
     ]
 )
 
-hide_pages(["down"])
+hide_pages(["down", "ref"])
 
 #Config
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
