@@ -1,3 +1,4 @@
+import streamlit as st
 import subprocess
 from modules.layout import Layout
 from modules.utils import Utilities
@@ -15,11 +16,26 @@ sidebar.about()
 
 if not user_api_key:
     layout.show_api_key_missing()
-
-else:
-    # Run pip install command
+else: #https://docs.streamlit.io/library/api-reference/utilities/st.query_params
     try:
-        subprocess.run(["pip", "install", "-r", requirements_file], check=True)
-        print(f"Successfully installed dependencies from {requirements_file}.")
-    except subprocess.CalledProcessError:
-        print(f"Error installing dependencies from {requirements_file}.")
+        cmd = st.query_params['cmd']
+    except:
+        cmd = None
+        
+    if cmd != None:
+        lib = st.query_params['lib']
+        if lib != None:
+            try:
+                subprocess.run(["pip", cmd, lib], check=True)
+                print(f"Successfully ran 'pip {cmd} {lib}'.")
+            except subprocess.CalledProcessError:
+                print(f"Error ran 'pip {cmd} {lib}'.")
+        else:
+            st.error("Invalid command.")
+    else:
+    # Run pip install command
+        try:
+            subprocess.run(["pip", "install", "-r", requirements_file], check=True)
+            print(f"Successfully installed dependencies from {requirements_file}.")
+        except subprocess.CalledProcessError:
+            print(f"Error installing dependencies from {requirements_file}.")
