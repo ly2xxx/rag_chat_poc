@@ -1,6 +1,7 @@
 import streamlit as st
 from modules.similarity import SimilarityScorer
 from st_pages import hide_pages
+import decimal
 
 hide_pages(["down", "ref"])
 st.title("Text Similarity Calculator")
@@ -12,4 +13,12 @@ scorer = SimilarityScorer()
     
 if st.button("Score"):
     score = scorer.score(text1, text2)
-    st.write("Similarity score:", score)
+    # Convert to Decimal to avoid floating point precision issues
+    score_formatted = decimal.Decimal(str(score))
+
+    # Multiply by 100 to get a percentage 
+    score_formatted *= 100
+
+    # Format to two decimal places  
+    percentage = '{0:.2f}%'.format(score_formatted)
+    st.write("Similarity score:", percentage)
