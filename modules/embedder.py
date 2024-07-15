@@ -74,6 +74,18 @@ class Embedder:
             file_extension =  os.path.splitext(uploaded_file)[1].lower()
             
             return file_extension
+    
+    def metadata_generator(self, uploaded_file):
+        '''
+        This generates metadata for documents stored in a Vectordb
+        :param pdf_file pdf_file name
+        :return: returns a dictionary of the metadata
+        '''
+        temp = {#"date_created": datetime.fromtimestamp(os.stat(pdf_file).st_ctime).strftime('%Y-%m-%d %H:%M:%S'),
+                "file_name": uploaded_file, #re.search(r"/([^/]+)\.pdf$", pdf_file).group(1),
+            #"date_modified":datetime.fromtimestamp(os.stat(pdf_file).st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+            }
+        return temp
 
     def storeDocEmbeds(self, file, original_filename):
         """
@@ -81,18 +93,19 @@ class Embedder:
         """ 
         
         file_extension = self.get_file_extension(original_filename)
+        # metadata = self.metadata_generator(original_filename)
 
         vectors = None
         if file_extension == ".zip":
             vectors = self.readVectorsFromZip(io.BytesIO(file), original_filename)
         else:
-            vectors = self.generateEmbeddingsFromFile(file, file_extension)
+            vectors = self.generateEmbeddingsFromFile(file, file_extension, original_filename)
 
         # Save the vectors to a pickle file
         with open(f"{self.PATH}/{original_filename}.pkl", "wb") as f:
             pickle.dump(vectors, f)
 
-    def generateEmbeddingsFromFile(self, file, file_extension):
+    def generateEmbeddingsFromFile(self, file, file_extension, original_filename):
         with tempfile.NamedTemporaryFile(mode="wb", delete=False) as tmp_file:
             try:
                 tmp_file.write(file)
@@ -121,6 +134,9 @@ class Embedder:
             data = loader.load_and_split(text_splitter)
 
         os.remove(tmp_file_path)
+
+        for doc in data:
+            doc.metadata['source'] = original_filename
                 
         embeddings = OpenAIEmbeddings()
 
