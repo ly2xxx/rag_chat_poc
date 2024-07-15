@@ -48,7 +48,7 @@ class Embedder:
                     # Load vectors from the embedding
                     with open(file_path, 'rb') as f:
                         f.seek(0)
-                        loaded_vectors = self.generateEmbeddingsFromFile(f.read(), self.get_file_extension(file))
+                        loaded_vectors = self.generateEmbeddingsFromFile(f.read(), self.get_file_extension(file), extracted_dir)
 
                 # Assuming 'vectors' is a FAISS Index, merge the loaded vectors
                 if vectors is None:
