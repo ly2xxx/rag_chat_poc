@@ -4,7 +4,7 @@ import re
 
 class Sidebar:
 
-    MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4"]
+    MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4o-mini"]
     TEMPERATURE_MIN_VALUE = 0.0
     TEMPERATURE_MAX_VALUE = 1.0
     TEMPERATURE_DEFAULT_VALUE = 0.0
