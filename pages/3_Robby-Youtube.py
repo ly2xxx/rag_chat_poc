@@ -11,7 +11,8 @@ from youtube_transcript_api import YouTubeTranscriptApi
 # from langchain.text_splitter import CharacterTextSplitter
 # from langchain.document_loaders import YoutubeLoader
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
-from langchain.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")

@@ -1,8 +1,10 @@
 import streamlit as st
-from langchain.chat_models import ChatOpenAI
+# from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
-from langchain.callbacks import get_openai_callback
+# from langchain.callbacks import get_openai_callback
+from langchain_community.callbacks import get_openai_callback
 import time
 
 #fix Error: module 'langchain' has no attribute 'verbose'
