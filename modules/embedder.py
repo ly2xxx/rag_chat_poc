@@ -1,7 +1,8 @@
 import os
 import pickle
 import tempfile
-from langchain.document_loaders.csv_loader import CSVLoader
+# from langchain.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import CSVLoader
 # from langchain.vectorstores import FAISS
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
