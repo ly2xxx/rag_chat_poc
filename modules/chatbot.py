@@ -1,6 +1,10 @@
 import streamlit as st
 # from langchain.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatOpenAI
+# from langchain.chat_models import initChatModel
+# from langchain.chat_models.universal import initChatModel
+#https://js.langchain.com/v0.2/docs/how_to/chat_models_universal_init/
+# import { initChatModel } from "langchain/chat_models/universal";
 from langchain.chains import ConversationalRetrievalChain
 from langchain.prompts.prompt import PromptTemplate
 # from langchain.callbacks import get_openai_callback
@@ -66,6 +70,47 @@ class Chatbot:
             + "]\n "
             # + "\n".join(map(str, result['source_documents']))
         )
+    
+
+    # async def conversational_chat(self, query):
+    #     start_time = time.time()
+    #     """
+    #     Start a conversational chat with a model via Langchain
+    #     """
+        
+    #     # Initialize the chat model using the new initChatModel function
+    #     llm = await initChatModel(self.model_name, {
+    #         'modelProvider': 'openai', # Change this according to your model provider
+    #         'temperature': self.temperature
+    #     })
+
+    #     retriever = self.vectors.as_retriever(search_type="similarity", search_kwargs={"k": 3})
+
+    #     chain = ConversationalRetrievalChain.from_llm(
+    #         llm=llm,
+    #         retriever=retriever,
+    #         # chain_type="map_reduce",
+    #         verbose=True,
+    #         return_source_documents=True,
+    #         max_tokens_limit=4097,
+    #         combine_docs_chain_kwargs={'prompt': self.QA_PROMPT}
+    #     )
+
+    #     chain_input = {"question": query, "chat_history": st.session_state["history"]}
+    #     result = chain(chain_input)
+
+    #     st.session_state["history"].append((query, result["answer"]))
+
+    #     end_time = time.time()
+    #     execution_time = end_time - start_time
+    #     # count_tokens_chain(chain, chain_input)
+    #     return (
+    #         result["answer"]
+    #         + "\n["
+    #         + f"Query time: {execution_time:.4f} seconds"
+    #         + "]\n "
+    #         # + "\n".join(map(str, result['source_documents']))
+    #     )
 
 
 def count_tokens_chain(chain, query):

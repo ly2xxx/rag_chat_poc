@@ -175,6 +175,10 @@ st.markdown(
     <h8>
     🚀 March 2024 - added new feature to calculate two paragraphs' similarity score. 
     </h8>
+    <br>
+    <h8>
+    🚀 July 2024 - added option to use 'gpt-4o-mini' model. 
+    </h8>
     <h4 style='text-align:center; color: green;'>*We don't store your API key or uploaded files.</h4>
     """,
     unsafe_allow_html=True)
