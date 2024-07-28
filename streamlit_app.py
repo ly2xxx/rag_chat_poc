@@ -26,6 +26,8 @@ import os
 
 #     app.run(port=8888)
 
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
 def paypal_donation_button():
     paypal_button_code = """
     <form action="https://www.paypal.com/donate" method="post" target="_blank">
