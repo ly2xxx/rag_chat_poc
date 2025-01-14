@@ -2,7 +2,7 @@
 openai==0.27.7
 langchain-community==0.2.10
 pandasai==0.2.15
-pywin32==308
+# pywin32==308
 playwright==1.42.0
 pdfplumber
 pypdf==3.9.0
