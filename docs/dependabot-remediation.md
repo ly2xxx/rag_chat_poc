@@ -23,7 +23,8 @@ never redesign them.
   root. Pages are tested with `streamlit.testing.v1.AppTest`. Tests never use the
   network, a real OpenAI key or a GPU: use fake models and embeddings, and the local
   model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged, except
-  `EXPECTED` in `tests/test_requirements.py`, which every piece updates to its pins.
+  `EXPECTED` in `tests/test_requirements.py`, which every piece updates to its pins, and
+  tests a piece section says to delete.
 - **Never in scope**: `playground/`, the notebooks, `Gallery/`, `.devcontainer/`,
   `.github/`, and alerts in packages a piece doesn't name.
 
@@ -106,19 +107,34 @@ The app has a smoke-test suite, and the packages it never imports are gone.
 
 ## Piece 2: Flask, Streamlit and pypdf
 
-Flask, Streamlit and pypdf are on fixed versions.
+Flask, Werkzeug, requests, Streamlit and pypdf are on fixed versions, and the menu uses
+Streamlit's own navigation.
 
-- `flask==3.1.3` or later, `streamlit==1.54.0` or later, `pypdf==6.21.4` or later,
-  `werkzeug==3.1.9` or later, `requests==2.33.0` or later; `streamlit-chat` too if the
-  new Streamlit needs it. `pyarrow` may then move to the newest release.
-- If the pinned `st-pages` doesn't work with the new Streamlit, remove it: in
-  `streamlit_app.py` build the menu with `st.navigation` from `st.Page` entries with
-  the same paths, titles and icons as the `show_pages` list, `download.py` and
-  `refresh.py` left out of the menu; delete every `hide_pages` call and import.
-- Delete the two Werkzeug IDs and their comment from `.trivyignore`.
-- Fix only what else the upgrades break (`flask_app.py`, `modules/history.py`).
-- `tests/test_pdf.py`: `PyPDFLoader` loads each sample PDF with at least one page
-  of non-empty text.
+- Pins: `flask==3.1.3`, `werkzeug==3.1.9`, `requests==2.33.0`, `pypdf==6.21.4`,
+  `streamlit==1.54.0`; remove `st-pages`. Keep `streamlit-chat==0.0.2.2` and
+  `pyarrow==25.0.0` (checked: they work with these). Update `EXPECTED` to match. Delete
+  the two Werkzeug IDs and their comment from `.trivyignore`.
+- `st-pages==0.5.0` fails on Streamlit 1.54 (`cannot import name '_on_pages_changed'`).
+  In `streamlit_app.py`: remove the `st_pages` import and the `add_page_title()`,
+  `show_pages_from_config()`, `show_pages([...])` and `hide_pages(...)` calls; move
+  everything after them into `def home():`, starting with `st.title("🏠 Home")`; then
+  at the end of the file:
+  `MENU` = `st.Page(home, title="Home", icon="🏠", default=True)` and an `st.Page` per
+  visible `show_pages` entry (`pages/0..4`, same titles and icons); `HIDDEN` =
+  `st.Page("pages/download.py", title="down", icon=":material/download:")` and
+  `st.Page("pages/refresh.py", title="ref", icon=":material/refresh:")` (`st.Page`
+  rejects the old icons); `page = st.navigation(MENU + HIDDEN, position="hidden")`;
+  in `st.sidebar`, `st.page_link(item)` for each item in `MENU`; `page.run()`.
+- Remove `from st_pages import hide_pages` and `hide_pages(["down", "ref"])` from
+  `pages/0`, `1`, `2`, `3` and `4`. Nothing else in the pages changes.
+- `flask_app.py` and `modules/history.py` need no change (checked).
+- Tests: delete `test_st_pages_exports` from `tests/test_requirements.py`.
+  `tests/test_navigation.py`: `AppTest` of `streamlit_app.py` shows the title
+  "🏠 Home" and six sidebar page links labelled Home, Keywords-Research,
+  Robby-Chat-file, Robby-Chat-web, Robby-Summary-youtube, Text-Similarity-score(beta);
+  `switch_page("pages/4_Text-Similarity-beta.py")` runs with no exception; no
+  `.py` file outside `playground/` contains `st_pages`. `tests/test_pdf.py`:
+  `PyPDFLoader` loads each sample PDF with at least one page of non-empty text.
 
 ## Piece 3: LangChain 1.x
 
