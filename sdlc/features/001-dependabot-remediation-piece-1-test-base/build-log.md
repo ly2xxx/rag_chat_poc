@@ -50,3 +50,22 @@ Every module in `modules/` imports, and `streamlit_app.py` and all eight pages r
   (runs `python -m pytest tests/test_imports.py tests/test_pages.py -v`): exit 0, 15 passed.
 
 **Deviations:** none. Both files are the plan's text.
+
+## Phase 3: Similarity and Flask smoke tests
+
+**Status:** passed
+
+**Files changed:** `tests/test_similarity.py`, `tests/test_flask.py`
+
+`SimilarityScorer` scores identical sentences above 0.99 and the cat paraphrase above the
+stock-price sentence with the local `all-MiniLM-L6-v2`; Flask's `GET /` returns 200.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 001-dependabot-remediation-piece-1-test-base --phase 3`
+  (runs `python -m pytest tests/test_similarity.py tests/test_flask.py -v`): first attempt
+  failed collecting `tests/test_flask.py` (`cannot import name 'url_quote' from
+  'werkzeug.urls'`, Werkzeug 3 with Flask 2.0.2); after phase 1 pinned `werkzeug==2.0.3`:
+  exit 0, 3 passed.
+
+**Deviations:** none in this phase's files (the plan's text). The Werkzeug pin it needed
+went into phase 1's `requirements.txt`; see Phase 1.
