@@ -47,3 +47,19 @@ pages; the home content is `home()`. The five pages no longer import or call `hi
 - `streamlit_app.py`: `generate_thumbnail` was defined after the old menu calls, so moving
   that code into `home()` would have nested it. It stays a module-level function, unchanged,
   placed above `home()`, as the plan says to keep it.
+
+## Phase 3: Remove Werkzeug trivy ignores
+
+**Status:** passed
+
+**Files changed:** `.trivyignore`, `tests/test_trivyignore.py`
+
+The Werkzeug comment and its two IDs (and the blank line before them) are gone; the six
+transformers IDs stay for piece 4.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 002-dependabot-remediation-piece-2-flask-str --phase 3`
+  (runs `python -m pytest tests/test_trivyignore.py -v`): first attempt failed (my edit
+  script wrote the wrong bytes; restored from git); then exit 0, 1 passed.
+
+**Deviations:** none.

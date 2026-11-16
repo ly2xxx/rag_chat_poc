@@ -10,7 +10,3 @@ CVE-2024-11394
 CVE-2026-4372
 CVE-2026-5241
 CVE-2026-9856
-
-# werkzeug==2.0.3: the only Werkzeug that Flask 2.0.2 runs on. Removed by piece 2.
-CVE-2023-25577
-CVE-2024-34069
