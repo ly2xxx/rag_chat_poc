@@ -34,3 +34,23 @@ test are gone, and `test_trivyignore_absent` keeps the file from coming back.
   `test ! -e tests/test_trivyignore.py`): exit 0, 8 passed.
 
 **Deviations:** none.
+
+## Phase 3: Prove offline scoring and CLI behaviour on the new stack
+
+**Status:** passed
+
+**Files changed:** `tests/test_cli.py`, `tests/test_similarity_scores.py`
+
+On torch 2.13, sentence-transformers 5.6 and transformers 5.23 the local model loads offline
+from `pytorch_model.bin` with the same scores (1.0, 0.984, 0.079), and `app/__main__.py`
+prints the score for two arguments and exits 1 for one.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 004-dependabot-remediation-piece-4-torch-and --phase 3`
+  (runs `python -m pytest tests/test_cli.py tests/test_similarity_scores.py -v`):
+  exit 0, 5 passed. Locally torch is the PyPI build; the pipeline's CPU build checks the
+  exact scores again.
+- The same with `--full`: exit 0, whole suite 51 passed.
+
+**Deviations:** none. Both files are the plan's text. (A first local run of this check came
+before the files were all in place, after a failed `git add`; it is not a code failure.)
