@@ -1,7 +1,7 @@
 import streamlit as st
 from modules.similarity import SimilarityScorer
 # from langchain.chains import StringDistanceEvalChain
-from langchain.evaluation import load_evaluator
+from langchain_classic.evaluation import load_evaluator
 #StringDistanceEvalChain or EmbeddingDistanceEvalChain?
 evaluator = load_evaluator("string_distance")
 

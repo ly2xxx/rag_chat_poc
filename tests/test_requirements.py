@@ -1,14 +1,13 @@
 from pathlib import Path
 
 EXPECTED = [
-    "langchain==0.2.11",
-    "openai==0.27.7",
-    "langchain-community==0.2.10",
+    "langchain==1.5.0",
+    "langchain-community==0.4.2",
     "pdfplumber==0.11.4",
     "pypdf==6.21.4",
     "streamlit==1.54.0",
     "streamlit-chat==0.0.2.2",
-    "tiktoken==0.4.0",
+    "tiktoken==0.14.0",
     "youtube-transcript-api==0.6.0",
     "faiss-cpu==1.9.0",
     "requests==2.33.0",
@@ -21,6 +20,10 @@ EXPECTED = [
     "transformers==4.46.3",
     "huggingface-hub==0.25.2",
     "werkzeug==3.1.9",
+    "langchain-openai==1.8.0",
+    "langchain-text-splitters==1.1.3",
+    "langchain-classic==1.0.8",
+    "rapidfuzz==3.14.6",
     "pandas==2.3.3",
     "python-dotenv==1.2.4",
 ]
