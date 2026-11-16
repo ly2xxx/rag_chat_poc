@@ -22,7 +22,8 @@ never redesign them.
 - **Tests**: pytest, in `tests/`, named `test_<area>.py`, run from the repository
   root. Pages are tested with `streamlit.testing.v1.AppTest`. Tests never use the
   network, a real OpenAI key or a GPU: use fake models and embeddings, and the local
-  model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged.
+  model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged, except
+  `EXPECTED` in `tests/test_requirements.py`, which every piece updates to its pins.
 - **Never in scope**: `playground/`, the notebooks, `Gallery/`, `.devcontainer/`,
   `.github/`, and alerts in packages a piece doesn't name.
 
@@ -71,7 +72,14 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
 ## Done
 
-Nothing yet.
+- **Piece 1** (#13): `tests/` holds the smoke suite, 32 tests: `conftest.py` (repo root on
+  `sys.path`, `OPENAI_API_KEY=sk-test`, removes `embeddings/*.pkl` a test created),
+  `test_requirements.py` (exact ordered pin list in `EXPECTED`: update it with every pin
+  change), `test_conftest.py`, `test_imports.py`, `test_pages.py` (`AppTest`, every page),
+  `test_similarity.py`, `test_flask.py`, `test_embedder.py`. pandasai, playwright and pytube
+  are gone; every line is pinned with `==`. Interim pins a fresh install needs:
+  `pyarrow==25.0.0` (NumPy < 2), `transformers==4.46.3` and `huggingface-hub==0.25.2`
+  (sentence-transformers 2.2.2, torch 2.1), `werkzeug==2.0.3` (Flask 2.0.2).
 
 ## Piece 1: Test baseline and unused packages
 
