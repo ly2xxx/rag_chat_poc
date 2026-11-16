@@ -7,7 +7,6 @@ from modules.history import ChatHistory
 from modules.layout import Layout
 from modules.utils import Utilities
 from modules.sidebar import Sidebar
-from st_pages import hide_pages
 
 #To be able to update the changes made to modules in localhost (press r)
 def reload_module(module_name):
@@ -17,7 +16,6 @@ def reload_module(module_name):
         importlib.reload(sys.modules[module_name])
     return sys.modules[module_name]
 
-hide_pages(["down", "ref"])
 history_module = reload_module('modules.history')
 layout_module = reload_module('modules.layout')
 utils_module = reload_module('modules.utils')
