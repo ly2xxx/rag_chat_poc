@@ -63,3 +63,19 @@ transformers IDs stay for piece 4.
   script wrote the wrong bytes; restored from git); then exit 0, 1 passed.
 
 **Deviations:** none.
+
+## Phase 4: Add PDF loader regression
+
+**Status:** passed
+
+**Files changed:** `tests/test_pdf.py`
+
+Both sample PDFs load with `PyPDFLoader` under pypdf 6.21.4 and give non-empty text.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 002-dependabot-remediation-piece-2-flask-str --phase 4`
+  (runs `python -m pytest tests/test_pdf.py -v`): exit 0, 1 passed.
+- The same with `--full` (whole suite and every phase's Verify block): exit 0, whole suite
+  37 passed.
+
+**Deviations:** none. The file is the plan's text.
