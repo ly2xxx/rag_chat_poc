@@ -32,10 +32,9 @@ never redesign them.
 
 Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
-- Open alerts after piece 2, 35 in 5 packages (current → upgrade to): torch 2.1.0 →
+- Open alerts after piece 3, 31 in 3 packages (current → upgrade to): torch 2.1.0 →
   2.13.0 (12, critical); sentence-transformers 2.2.2 → 5.6.0 (1, critical); transformers
-  4.46.3 → 5.10.0 (18, high); langchain 0.2.11 → 1.3.9 (2, high); langchain-community
-  0.2.10 → 0.3.27 (2, high).
+  4.46.3 → 5.10.0 (18, high).
 - `pandasai`, `playwright` and `pytube` are imported nowhere; `streamlit_app.py` line
   236 mentions PandasAI in a comment. `modules/utils.py` imports `pandas` and `dotenv`,
   which aren't in `requirements.txt`: with the current pins they resolve to

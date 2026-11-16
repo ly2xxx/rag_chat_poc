@@ -6,7 +6,7 @@ Design: [`docs/dependabot-remediation.md`](../../docs/dependabot-remediation.md)
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | 1: Test baseline and unused packages | `001-dependabot-remediation-piece-1-test-base` | #6, #12 | #13 | 4 (pandasai); 30 now visible in new pins: transformers 18, werkzeug 10, requests 2 | merged |
 | 2: Flask, Streamlit and pypdf | `002-dependabot-remediation-piece-2-flask-str` | #15, #17 | #22 | 85 (flask 2, werkzeug 10, requests 2, streamlit 3, pypdf 68); none new | merged |
-| 3: LangChain 1.x | `003-dependabot-remediation-piece-3-langchain` | #24 | #28 | pending the monitor rerun | merged |
+| 3: LangChain 1.x | `003-dependabot-remediation-piece-3-langchain` | #24 | #28 | 4 (langchain 2, langchain-community 2); none new | merged |
 | 4: Torch and sentence-transformers | | | | | planned |
 
 Status is one of: `planned`, `building` (the run has started), `in review` (the
@@ -14,7 +14,7 @@ pipeline's pull request is open), `merged`.
 
 ## Next
 
-Record the alerts piece 3 closed (the monitor reruns 10 minutes after #28), then start piece 4.
+Start piece 4. 31 alerts open in 3 packages, all piece 4's.
 
 ## Deviations and follow-ups
 
