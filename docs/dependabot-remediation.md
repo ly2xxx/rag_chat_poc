@@ -82,6 +82,15 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
   are gone; every line is pinned with `==`. Interim pins a fresh install needs:
   `pyarrow==25.0.0` (NumPy < 2), `transformers==4.46.3` and `huggingface-hub==0.25.2`
   (sentence-transformers 2.2.2, torch 2.1), `werkzeug==2.0.3` (Flask 2.0.2).
+- **Piece 2** (#22): `flask==3.1.3`, `werkzeug==3.1.9`, `requests==2.33.0`,
+  `pypdf==6.21.4`, `streamlit==1.54.0`; `st-pages` is gone. `streamlit_app.py` defines
+  `generate_thumbnail()` and `home()` (all home content, starting with `st.title("🏠 Home")`),
+  then `MENU` and `HIDDEN` (`st.Page` lists), `page = st.navigation(MENU + HIDDEN,
+  position="hidden")`, sidebar `st.page_link` per `MENU` item, `page.run()`. Tests added:
+  `test_navigation.py` (sidebar links via `at.sidebar.get("page_link")`), `test_pdf.py`,
+  `test_trivyignore.py` (expects 6 IDs: update it when piece 4 empties `.trivyignore`),
+  and `test_requirements_keeps_utf8_bom_and_crlf`. `.trivyignore` keeps only the six
+  transformers IDs.
 
 ## Piece 1: Test baseline and unused packages
 
