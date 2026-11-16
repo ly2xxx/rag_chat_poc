@@ -10,9 +10,9 @@ from youtube_transcript_api import YouTubeTranscriptApi
 # from langchain.llms import OpenAI
 # from langchain.text_splitter import CharacterTextSplitter
 # from langchain.document_loaders import YoutubeLoader
-from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 # from langchain.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
 
@@ -80,7 +80,7 @@ else:
             human_prompt = HumanMessagePromptTemplate.from_template("Summarize the following: \n{youtube_transcript}")
             chat_prompt = ChatPromptTemplate.from_messages([human_prompt])
             llm = ChatOpenAI(temperature=0)
-            answer = llm(chat_prompt.format_prompt(youtube_transcript=first_3600_tokens).to_messages())
+            answer = llm.invoke(chat_prompt.format_prompt(youtube_transcript=first_3600_tokens).to_messages())
 
             st.subheader(answer)
 

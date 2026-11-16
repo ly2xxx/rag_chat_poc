@@ -1,19 +1,19 @@
 import streamlit as st
 # from langchain.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 # from langchain.chat_models import initChatModel
 # from langchain.chat_models.universal import initChatModel
 #https://js.langchain.com/v0.2/docs/how_to/chat_models_universal_init/
 # import { initChatModel } from "langchain/chat_models/universal";
-from langchain.chains import ConversationalRetrievalChain
-from langchain.prompts.prompt import PromptTemplate
+from langchain_classic.chains import ConversationalRetrievalChain
+from langchain_core.prompts import PromptTemplate
 # from langchain.callbacks import get_openai_callback
 from langchain_community.callbacks import get_openai_callback
 import time
 
 #fix Error: module 'langchain' has no attribute 'verbose'
-import langchain
-langchain.verbose = False
+from langchain_core.globals import set_verbose
+set_verbose(False)
 
 class Chatbot:
 
@@ -56,7 +56,7 @@ class Chatbot:
             combine_docs_chain_kwargs={'prompt': self.QA_PROMPT})
 
         chain_input = {"question": query, "chat_history": st.session_state["history"]}
-        result = chain(chain_input)
+        result = chain.invoke(chain_input)
 
         st.session_state["history"].append((query, result["answer"]))
 
@@ -115,7 +115,7 @@ class Chatbot:
 
 def count_tokens_chain(chain, query):
     with get_openai_callback() as cb:
-        result = chain.run(query)
+        result = chain.invoke(query)
         st.write(f'###### Tokens used in this conversation : {cb.total_tokens} tokens')
     return result 
 
