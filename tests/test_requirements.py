@@ -21,6 +21,7 @@ EXPECTED = [
     "pyarrow==25.0.0",
     "transformers==4.46.3",
     "huggingface-hub==0.25.2",
+    "werkzeug==2.0.3",
     "pandas==2.3.3",
     "python-dotenv==1.2.4",
 ]
