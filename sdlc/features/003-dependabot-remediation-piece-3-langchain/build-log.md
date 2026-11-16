@@ -31,3 +31,19 @@ plan's import and call changes, live code only.
 - `test_chatbot_uses_langchain_1x_imports_and_invoke` checks that the old
   `chain(chain_input)` is gone after removing the new `chain.invoke(chain_input)`, since
   the second string contains the first.
+
+## Phase 2: Offline chatbot chain test
+
+**Status:** passed
+
+**Files changed:** `tests/test_chatbot.py`
+
+`Chatbot.conversational_chat` runs the migrated `ConversationalRetrievalChain` with a fake
+chat model whose token counter needs no download, over a FAISS store of fake embeddings.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 003-dependabot-remediation-piece-3-langchain --phase 2`
+  (runs `python -m pytest tests/test_chatbot.py -v`): exit 0, 2 passed. Also passes
+  without `HF_HUB_OFFLINE`, as the pipeline runs it.
+
+**Deviations:** none. The file is the plan's text.
