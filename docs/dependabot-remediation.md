@@ -89,6 +89,12 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
   `test_trivyignore.py` (expects 6 IDs: update it when piece 4 empties `.trivyignore`),
   and `test_requirements_keeps_utf8_bom_and_crlf`. `.trivyignore` keeps only the six
   transformers IDs.
+- **Piece 3** (#28): `langchain==1.5.0`, `langchain-community==0.4.2`, `langchain-classic==1.0.8`,
+  `langchain-openai==1.8.0`, `langchain-text-splitters==1.1.3`, `tiktoken==0.14.0`,
+  `rapidfuzz==3.14.6`; no `openai` pin (NumPy is now 2.x). Imports as listed in the old
+  piece 3 section; `chain.invoke(...)` everywhere; page 3 calls `llm.invoke(...)` (1.x chat
+  models aren't callable). Tests added: `test_langchain_migration.py` (source checks),
+  `test_chatbot.py` (`OfflineFakeChat`), `test_evaluator.py` (`filename.py` under `AppTest`).
 
 ## Piece 1: Test baseline and unused packages
 
@@ -100,44 +106,23 @@ Built; see Done.
 
 ## Piece 3: LangChain 1.x
 
-LangChain is on fixed versions and the `openai==0.27.7` client is gone.
-
-- Pins, changed in place: `langchain==1.5.0`, `langchain-community==0.4.2`,
-  `tiktoken==0.14.0` (`langchain-openai` needs >= 0.7); delete the `openai==0.27.7` line;
-  add before `pandas`: `langchain-openai==1.8.0`, `langchain-text-splitters==1.1.3`,
-  `langchain-classic==1.0.8`, `rapidfuzz==3.14.6`. They install together with every
-  other pin (checked); NumPy becomes 2.x and the suite still passes on torch 2.1.
-- Imports (live code only; leave commented-out lines alone):
-  `modules/chatbot.py`: `ChatOpenAI` from `langchain_openai`,
-  `ConversationalRetrievalChain` from `langchain_classic.chains`, `PromptTemplate` from
-  `langchain_core.prompts`; replace `import langchain` / `langchain.verbose = False`
-  with `from langchain_core.globals import set_verbose` / `set_verbose(False)`; the
-  first `chain(chain_input)` becomes `chain.invoke(chain_input)` and `chain.run(query)`
-  becomes `chain.invoke(query)`. `modules/embedder.py`: `OpenAIEmbeddings` from
-  `langchain_openai`, `RecursiveCharacterTextSplitter` from `langchain_text_splitters`.
-  `pages/3_Robby-Youtube.py`: prompts from `langchain_core.prompts`, `ChatOpenAI` from
-  `langchain_openai`. `filename.py`: `load_evaluator` from
-  `langchain_classic.evaluation`. `tests/test_embedder.py`: the splitter import from
-  `langchain_text_splitters`. `ChatOpenAI(model_name=..., temperature=...)` still works.
-- `tests/test_chatbot.py`: `class OfflineFakeChat(FakeListChatModel)` (from
-  `langchain_core.language_models.fake_chat_models`) with `get_num_tokens(self, text)`
-  returning `len(text.split())` (the chain's `max_tokens_limit` would otherwise download
-  a GPT-2 tokenizer); patch `modules.chatbot.ChatOpenAI` to
-  `lambda **kwargs: OfflineFakeChat(responses=["hi"])`; build FAISS with
-  `FAISS.from_texts([three short texts], FakeEmbeddings(size=8))`; set
-  `st.session_state["history"] = []`; `conversational_chat("q")` starts with `hi` and
-  the history is `[("q", "hi")]`. `tests/test_evaluator.py`: `AppTest.from_file("filename.py")` runs with no exception;
-  after `text_input[0]` "abc", `text_input[1]` "abd" and clicking `button[0]`, a markdown
-  element contains "Similarity score".
+Built; see Done.
 
 ## Piece 4: Torch and sentence-transformers
 
-Similarity scoring runs on fixed versions of torch and sentence-transformers.
+Similarity scoring runs on fixed versions of torch, sentence-transformers and transformers,
+and the last accepted CVEs are gone.
 
-- `torch==2.13.0` or later (from the CPU index), `sentence-transformers==5.6.0` or
-  later; `transformers==5.10.0` or later and `huggingface-hub` at a version they accept. Delete the six transformers IDs and their comment from `.trivyignore`.
-- Loading must stay local: `SentenceTransformer('./all-MiniLM-L6-v2')`, no download.
-  If the new versions refuse `pytorch_model.bin`, add a `model.safetensors` converted
-  from it, delete the `.bin`, and say so in the build log.
-- `tests/test_cli.py`: `python app/__main__.py "a cat" "a cat"` prints a
-  `Sentence Transformers:` line with a value above 0.99; with one argument it exits 1.
+- Pins, changed in place: `torch==2.13.0` (CPU index), `sentence-transformers==5.6.0`,
+  `transformers==5.23.0`, `huggingface-hub==2.4.0`. They install with every other pin
+  (checked); `tokenizers` and `safetensors` follow on their own.
+- No code change is needed (checked): `SentenceTransformer('./all-MiniLM-L6-v2')` still
+  loads the local `pytorch_model.bin` offline and scores identical sentences 1.0, the cat
+  paraphrase 0.984 and the stock sentence 0.079; `app/__main__.py` prints
+  `Sentence Transformers: 1.0` for `"a cat" "a cat"`. Don't convert or download the model.
+- Delete `.trivyignore` (its six transformers IDs are fixed) and
+  `tests/test_trivyignore.py`.
+- `tests/test_cli.py`: `subprocess.run([sys.executable, "app/__main__.py", "a cat",
+  "a cat"])` prints a `Sentence Transformers:` line with a value above 0.99; with one
+  argument it exits 1. `tests/test_requirements.py`: add a test that `.trivyignore`
+  doesn't exist.
