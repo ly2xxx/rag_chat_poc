@@ -31,3 +31,18 @@ Removed `pandasai`, `playwright` and `pytube`, pinned every remaining package wi
 - `test_fixture_removes_probe_after_test` writes the probe under the repository root's
   `embeddings/` (absolute path) rather than a path relative to the working directory, so it
   matches the fixture's cleanup root wherever pytest is started.
+
+## Phase 2: Import and Streamlit page smoke tests
+
+**Status:** passed
+
+**Files changed:** `tests/test_imports.py`, `tests/test_pages.py`
+
+Every module in `modules/` imports, and `streamlit_app.py` and all eight pages run under
+`AppTest` with no exception and no user input.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 001-dependabot-remediation-piece-1-test-base --phase 2`
+  (runs `python -m pytest tests/test_imports.py tests/test_pages.py -v`): exit 0, 15 passed.
+
+**Deviations:** none. Both files are the plan's text.
