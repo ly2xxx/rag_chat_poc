@@ -66,3 +66,7 @@ def test_requirements_keeps_utf8_bom_and_crlf() -> None:
     raw = Path("requirements.txt").read_bytes()
     assert raw.startswith(b"\xef\xbb\xbf")
     assert raw.count(b"\n") == raw.count(b"\r\n")
+
+
+def test_trivyignore_absent() -> None:
+    assert Path(".trivyignore").exists() is False
