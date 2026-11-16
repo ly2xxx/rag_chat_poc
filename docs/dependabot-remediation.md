@@ -62,7 +62,10 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
   `embeddings/` in the working directory and caches `<name>.pkl` files there.
 - `pages/3_Robby-Youtube.py`: `ChatOpenAI` from `langchain_community.chat_models`,
   prompts from `langchain.prompts`. `filename.py`: `load_evaluator("string_distance")`.
-- `requirements.txt` pins `openai==0.27.7` and starts with a UTF-8 byte-order mark.
+- `requirements.txt` pins `openai==0.27.7`, starts with a UTF-8 byte-order mark and
+  uses CRLF line endings; keep both.
+- `.trivyignore` accepts 8 CVEs in piece 1's `transformers==4.46.3` and
+  `werkzeug==2.0.3` pins, each commented with the piece that removes it.
 - `flask_app.py`: `GET /` renders `templates/flask_index.html`.
 - Sample PDFs: `playground/sample_documents/*.pdf` (read-only fixtures).
 
@@ -102,6 +105,9 @@ Flask, Streamlit and pypdf are on fixed versions.
   `streamlit_app.py` build the menu with `st.navigation` from `st.Page` entries with
   the same paths, titles and icons as the `show_pages` list, `download.py` and
   `refresh.py` left out of the menu; delete every `hide_pages` call and import.
+- Pin `werkzeug` to the version the new Flask needs (or remove the pin if Flask's own
+  requirement suffices), and delete the two Werkzeug IDs and their comment from
+  `.trivyignore`.
 - Fix only what else the upgrades break (`flask_app.py`, `modules/history.py`).
 - `tests/test_pdf.py`: `PyPDFLoader` loads each sample PDF with at least one page
   of non-empty text.
@@ -132,7 +138,8 @@ LangChain is on fixed versions and the `openai==0.27.7` client is gone.
 Similarity scoring runs on fixed versions of torch and sentence-transformers.
 
 - `torch==2.13.0` or later (from the CPU index), `sentence-transformers==5.6.0` or
-  later, and `transformers` if they need it.
+  later; `transformers` and `huggingface-hub` at versions they accept with no open
+  HIGH CVE. Delete the six transformers IDs and their comment from `.trivyignore`.
 - Loading must stay local: `SentenceTransformer('./all-MiniLM-L6-v2')`, no download.
   If the new versions refuse `pytorch_model.bin`, add a `model.safetensors` converted
   from it, delete the `.bin`, and say so in the build log.
