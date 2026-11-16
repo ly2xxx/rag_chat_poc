@@ -5,23 +5,23 @@ EXPECTED = [
     "openai==0.27.7",
     "langchain-community==0.2.10",
     "pdfplumber==0.11.4",
-    "pypdf==3.9.0",
+    "pypdf==6.21.4",
     "streamlit==1.31.1",
     "streamlit-chat==0.0.2.2",
     "tiktoken==0.4.0",
     "youtube-transcript-api==0.6.0",
     "faiss-cpu==1.9.0",
-    "requests==2.32.3",
+    "requests==2.33.0",
     "bs4==0.0.2",
     "st-pages==0.5.0",
-    "flask==2.0.2",
+    "flask==3.1.3",
     "sentence-transformers==2.2.2",
     "torch==2.1.0",
     # Pins a fresh install needs with the pins above (build-log.md, Phase 1 deviations).
     "pyarrow==25.0.0",
     "transformers==4.46.3",
     "huggingface-hub==0.25.2",
-    "werkzeug==2.0.3",
+    "werkzeug==3.1.9",
     "pandas==2.3.3",
     "python-dotenv==1.2.4",
 ]
@@ -61,3 +61,9 @@ def test_gitignore_ignores_embeddings() -> None:
 
 def test_streamlit_app_has_no_pandasai_mention() -> None:
     assert "PandasAI" not in Path("streamlit_app.py").read_text(encoding="utf-8")
+
+
+def test_requirements_keeps_utf8_bom_and_crlf() -> None:
+    raw = Path("requirements.txt").read_bytes()
+    assert raw.startswith(b"\xef\xbb\xbf")
+    assert raw.count(b"\n") == raw.count(b"\r\n")
