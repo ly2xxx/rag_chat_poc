@@ -69,3 +69,20 @@ stock-price sentence with the local `all-MiniLM-L6-v2`; Flask's `GET /` returns 
 
 **Deviations:** none in this phase's files (the plan's text). The Werkzeug pin it needed
 went into phase 1's `requirements.txt`; see Phase 1.
+
+## Phase 4: Embedder smoke test
+
+**Status:** passed
+
+**Files changed:** `tests/test_embedder.py`
+
+The Wales PDF loads with `PyPDFLoader`, splits at 1,000 characters, and a FAISS store
+built with `FakeEmbeddings(size=8)` returns 3 documents for `similarity_search("Wales", k=3)`.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 001-dependabot-remediation-piece-1-test-base --phase 4`
+  (runs `python -m pytest tests/test_embedder.py -v`): exit 0, 1 passed.
+- The same with `--full` (whole suite and every phase's Verify block): exit 0, whole suite
+  32 passed.
+
+**Deviations:** none. The file is the plan's text.
