@@ -6,7 +6,7 @@ Design: [`docs/dependabot-remediation.md`](../../docs/dependabot-remediation.md)
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | 1: Test baseline and unused packages | `001-dependabot-remediation-piece-1-test-base` | #6, #12 | #13 | 4 (pandasai); 30 now visible in new pins: transformers 18, werkzeug 10, requests 2 | merged |
 | 2: Flask, Streamlit and pypdf | `002-dependabot-remediation-piece-2-flask-str` | #15, #17 | #22 | 85 (flask 2, werkzeug 10, requests 2, streamlit 3, pypdf 68); none new | merged |
-| 3: LangChain 1.x | | | | | planned |
+| 3: LangChain 1.x | `003-dependabot-remediation-piece-3-langchain` | #24 | #28 | 4 (langchain 2, langchain-community 2); none new | merged |
 | 4: Torch and sentence-transformers | | | | | planned |
 
 Status is one of: `planned`, `building` (the run has started), `in review` (the
@@ -14,7 +14,7 @@ pipeline's pull request is open), `merged`.
 
 ## Next
 
-Start piece 3. 35 alerts open in 5 packages (pieces 3 and 4).
+Start piece 4. 31 alerts open in 3 packages, all piece 4's.
 
 ## Deviations and follow-ups
 
@@ -40,3 +40,13 @@ Piece 2 (details in its `build-log.md`):
 - The hidden pages `down` and `ref` use Material icons; `st.Page` rejects `⤓` and `🔁`.
 - Review concerns left as they are: one extra blank line removed from `.trivyignore`; the
   `.trivyignore` and menu tests check counts and labels, not each ID and icon.
+
+Piece 3 (details in its `build-log.md`):
+- Designed from a prototype install (#23), so the plan held: `tiktoken` had to move with
+  `langchain-openai`, and the chatbot test needs an offline token counter.
+- `pages/3_Robby-Youtube.py`: `llm(...)` became `llm.invoke(...)` against the plan's text,
+  because LangChain 1.x chat models aren't callable; the summary button (needs an OpenAI
+  key and YouTube) can't be tested here. Needs one manual run: closing checklist.
+- Review concerns left as they are: `count_tokens_chain` (unused) now calls
+  `chain.invoke(query)` with a string; the build log wrongly says `chain(chain_input)` is a
+  substring of `chain.invoke(chain_input)` (the test is still correct).
