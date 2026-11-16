@@ -24,7 +24,7 @@ never redesign them.
   network, a real OpenAI key or a GPU: use fake models and embeddings, and the local
   model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged, except
   `EXPECTED` in `tests/test_requirements.py`, which every piece updates to its pins, and
-  tests a piece section says to delete.
+  tests a piece section says to change or delete.
 - **Never in scope**: `playground/`, the notebooks, `Gallery/`, `.devcontainer/`,
   `.github/`, and alerts in packages a piece doesn't name.
 
@@ -94,77 +94,43 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
 ## Piece 1: Test baseline and unused packages
 
-The app has a smoke-test suite, and the packages it never imports are gone.
-
-- Remove `pandasai`, `playwright` and `pytube` from `requirements.txt`, and the
-  PandasAI mention from `streamlit_app.py`. Add `pandas==2.3.3` and `python-dotenv==1.2.4`.
-- Pin `st-pages` to the newest release that still exports every name in the Facts.
-- Add `embeddings/` to `.gitignore`.
-- `tests/conftest.py`: repository root on `sys.path`; an autouse fixture sets
-  `OPENAI_API_KEY=sk-test` and removes `embeddings/*.pkl` files a test created.
-- `tests/test_imports.py`: every module in `modules/` imports.
-- `tests/test_pages.py`: `AppTest.from_file(path, default_timeout=60).run()` has no
-  exception for `streamlit_app.py` and each `pages/*.py`, without user input.
-- `tests/test_similarity.py`: identical sentences score above 0.99; "a cat sits on
-  the mat" scores higher against "a cat is sitting on a mat" than against "stock
-  prices fell today".
-- `tests/test_flask.py`: `GET /` returns 200.
-- `tests/test_embedder.py`: `playground/sample_documents/wales-in-world.pdf` loaded with `PyPDFLoader`, split with
-  `RecursiveCharacterTextSplitter(chunk_size=1000)`, and stored with
-  `FAISS.from_documents(docs, FakeEmbeddings(size=8))` answers
-  `similarity_search("Wales", k=3)` with 3 documents.
+Built; see Done.
 
 ## Piece 2: Flask, Streamlit and pypdf
 
-Flask, Werkzeug, requests, Streamlit and pypdf are on fixed versions, and the menu uses
-Streamlit's own navigation.
-
-- Pins: `flask==3.1.3`, `werkzeug==3.1.9`, `requests==2.33.0`, `pypdf==6.21.4`,
-  `streamlit==1.54.0`; remove `st-pages`. Keep `streamlit-chat==0.0.2.2` and
-  `pyarrow==25.0.0` (checked: they work with these). Update `EXPECTED` to match. Delete
-  the two Werkzeug IDs and their comment from `.trivyignore`.
-- `st-pages==0.5.0` fails on Streamlit 1.54 (`cannot import name '_on_pages_changed'`).
-  In `streamlit_app.py`: remove the `st_pages` import and the `add_page_title()`,
-  `show_pages_from_config()`, `show_pages([...])` and `hide_pages(...)` calls; move
-  everything after them into `def home():`, starting with `st.title("🏠 Home")`; then
-  at the end of the file:
-  `MENU` = `st.Page(home, title="Home", icon="🏠", default=True)` and an `st.Page` per
-  visible `show_pages` entry (`pages/0..4`, same titles and icons); `HIDDEN` =
-  `st.Page("pages/download.py", title="down", icon=":material/download:")` and
-  `st.Page("pages/refresh.py", title="ref", icon=":material/refresh:")` (`st.Page`
-  rejects the old icons); `page = st.navigation(MENU + HIDDEN, position="hidden")`;
-  in `st.sidebar`, `st.page_link(item)` for each item in `MENU`; `page.run()`.
-- Remove `from st_pages import hide_pages` and `hide_pages(["down", "ref"])` from
-  `pages/0`, `1`, `2`, `3` and `4`. Nothing else in the pages changes.
-- `flask_app.py` and `modules/history.py` need no change (checked).
-- Tests: delete `test_st_pages_exports` from `tests/test_requirements.py`.
-  `tests/test_navigation.py`: `AppTest` of `streamlit_app.py` shows the title
-  "🏠 Home" and six sidebar page links labelled Home, Keywords-Research,
-  Robby-Chat-file, Robby-Chat-web, Robby-Summary-youtube, Text-Similarity-score(beta);
-  `switch_page("pages/4_Text-Similarity-beta.py")` runs with no exception; no
-  `.py` file outside `playground/` contains `st_pages`. `tests/test_pdf.py`:
-  `PyPDFLoader` loads each sample PDF with at least one page of non-empty text.
+Built; see Done.
 
 ## Piece 3: LangChain 1.x
 
 LangChain is on fixed versions and the `openai==0.27.7` client is gone.
 
-- `langchain==1.3.9` or later; `langchain-community` at the newest release
-  compatible with it (0.3.27 or later); add `langchain-openai`,
-  `langchain-text-splitters` and `langchain-classic` at compatible versions; remove
-  the `openai` pin (`langchain-openai` brings a current one); add `rapidfuzz` if
-  `load_evaluator("string_distance")` needs it.
-- In LangChain 1.x the legacy chains and evaluators live in `langchain_classic`:
-  `ConversationalRetrievalChain` from `langchain_classic.chains`, `load_evaluator`
-  from `langchain_classic.evaluation`. `ChatOpenAI` and `OpenAIEmbeddings` come from
-  `langchain_openai`; `RecursiveCharacterTextSplitter` from `langchain_text_splitters`;
-  prompts from `langchain_core.prompts`. Replace `langchain.verbose = False` with
-  `set_verbose(False)` from `langchain_core.globals`, and `chain(chain_input)` with
-  `chain.invoke(chain_input)`. Keep the chain's arguments.
-- `tests/test_chatbot.py`: with `modules.chatbot.ChatOpenAI` patched to return
-  `FakeListChatModel(responses=["hi"])` and a FAISS store built with `FakeEmbeddings`,
-  `conversational_chat("q")` returns text starting with `hi` and appends `("q", "hi")`
-  to `st.session_state["history"]`.
+- Pins, changed in place: `langchain==1.5.0`, `langchain-community==0.4.2`,
+  `tiktoken==0.14.0` (`langchain-openai` needs >= 0.7); delete the `openai==0.27.7` line;
+  add before `pandas`: `langchain-openai==1.8.0`, `langchain-text-splitters==1.1.3`,
+  `langchain-classic==1.0.8`, `rapidfuzz==3.14.6`. They install together with every
+  other pin (checked); NumPy becomes 2.x and the suite still passes on torch 2.1.
+- Imports (live code only; leave commented-out lines alone):
+  `modules/chatbot.py`: `ChatOpenAI` from `langchain_openai`,
+  `ConversationalRetrievalChain` from `langchain_classic.chains`, `PromptTemplate` from
+  `langchain_core.prompts`; replace `import langchain` / `langchain.verbose = False`
+  with `from langchain_core.globals import set_verbose` / `set_verbose(False)`; the
+  first `chain(chain_input)` becomes `chain.invoke(chain_input)` and `chain.run(query)`
+  becomes `chain.invoke(query)`. `modules/embedder.py`: `OpenAIEmbeddings` from
+  `langchain_openai`, `RecursiveCharacterTextSplitter` from `langchain_text_splitters`.
+  `pages/3_Robby-Youtube.py`: prompts from `langchain_core.prompts`, `ChatOpenAI` from
+  `langchain_openai`. `filename.py`: `load_evaluator` from
+  `langchain_classic.evaluation`. `tests/test_embedder.py`: the splitter import from
+  `langchain_text_splitters`. `ChatOpenAI(model_name=..., temperature=...)` still works.
+- `tests/test_chatbot.py`: `class OfflineFakeChat(FakeListChatModel)` (from
+  `langchain_core.language_models.fake_chat_models`) with `get_num_tokens(self, text)`
+  returning `len(text.split())` (the chain's `max_tokens_limit` would otherwise download
+  a GPT-2 tokenizer); patch `modules.chatbot.ChatOpenAI` to
+  `lambda **kwargs: OfflineFakeChat(responses=["hi"])`; build FAISS with
+  `FAISS.from_texts([three short texts], FakeEmbeddings(size=8))`; set
+  `st.session_state["history"] = []`; `conversational_chat("q")` starts with `hi` and
+  the history is `[("q", "hi")]`. `tests/test_evaluator.py`: `AppTest.from_file("filename.py")` runs with no exception;
+  after `text_input[0]` "abc", `text_input[1]` "abd" and clicking `button[0]`, a markdown
+  element contains "Similarity score".
 
 ## Piece 4: Torch and sentence-transformers
 
