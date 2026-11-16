@@ -13,10 +13,8 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 # from langchain.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatOpenAI
-from st_pages import hide_pages
 
 # st.set_page_config(layout="wide", page_icon="💬", page_title="Robby | Chat-Bot 🤖")
-hide_pages(["down", "ref"])
 
 # Instantiate the main components
 layout, sidebar, utils = Layout(), Sidebar(), Utilities()

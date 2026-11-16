@@ -6,14 +6,13 @@ EXPECTED = [
     "langchain-community==0.2.10",
     "pdfplumber==0.11.4",
     "pypdf==6.21.4",
-    "streamlit==1.31.1",
+    "streamlit==1.54.0",
     "streamlit-chat==0.0.2.2",
     "tiktoken==0.4.0",
     "youtube-transcript-api==0.6.0",
     "faiss-cpu==1.9.0",
     "requests==2.33.0",
     "bs4==0.0.2",
-    "st-pages==0.5.0",
     "flask==3.1.3",
     "sentence-transformers==2.2.2",
     "torch==2.1.0",
@@ -50,9 +49,6 @@ def test_no_cuda_packages() -> None:
         name = line.split("==")[0].lower()
         assert not any(word in name for word in ("cuda", "cudnn", "cublas", "nccl")), line
 
-
-def test_st_pages_exports() -> None:
-    from st_pages import hide_pages, show_pages_from_config, add_page_title, show_pages, Page, Section  # noqa: F401
 
 
 def test_gitignore_ignores_embeddings() -> None:
