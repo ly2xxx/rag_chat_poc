@@ -47,3 +47,19 @@ chat model whose token counter needs no download, over a FAISS store of fake emb
   without `HF_HUB_OFFLINE`, as the pipeline runs it.
 
 **Deviations:** none. The file is the plan's text.
+
+## Phase 3: Evaluator AppTest and explicit regression
+
+**Status:** passed
+
+**Files changed:** `tests/test_evaluator.py`
+
+`filename.py` loads under `AppTest`, and its "Calculate similarity" button shows a
+string-distance score with `langchain_classic` and `rapidfuzz`.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 003-dependabot-remediation-piece-3-langchain --phase 3`
+  (runs the plan's explicit regression list): exit 0, 46 passed.
+- The same with `--full`: exit 0, whole suite passed.
+
+**Deviations:** none. The file is the plan's text.
