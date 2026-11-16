@@ -32,9 +32,7 @@ never redesign them.
 
 Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
-- Open alerts after piece 3, 31 in 3 packages (current → upgrade to): torch 2.1.0 →
-  2.13.0 (12, critical); sentence-transformers 2.2.2 → 5.6.0 (1, critical); transformers
-  4.46.3 → 5.10.0 (18, high).
+- Open alerts after piece 4: none.
 - `pandasai`, `playwright` and `pytube` are imported nowhere; `streamlit_app.py` line
   236 mentions PandasAI in a comment. `modules/utils.py` imports `pandas` and `dotenv`,
   which aren't in `requirements.txt`: with the current pins they resolve to
@@ -94,6 +92,12 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
   piece 3 section; `chain.invoke(...)` everywhere; page 3 calls `llm.invoke(...)` (1.x chat
   models aren't callable). Tests added: `test_langchain_migration.py` (source checks),
   `test_chatbot.py` (`OfflineFakeChat`), `test_evaluator.py` (`filename.py` under `AppTest`).
+- **Piece 4** (#34): `torch==2.13.0`, `sentence-transformers==5.6.0`, `transformers==5.23.0`,
+  `huggingface-hub==2.4.0`; no code change. `.trivyignore` and `tests/test_trivyignore.py` are
+  gone (`test_trivyignore_absent` guards it). Tests added: `test_cli.py`,
+  `test_similarity_scores.py` (exact scores 1.0, 0.984, 0.079).
+- **Result:** no open Dependabot alerts (issue #4 closed by the monitor, 2026-11-16 23:15 UTC);
+  whole suite 51 passed on `main`.
 
 ## Piece 1: Test baseline and unused packages
 
@@ -109,19 +113,4 @@ Built; see Done.
 
 ## Piece 4: Torch and sentence-transformers
 
-Similarity scoring runs on fixed versions of torch, sentence-transformers and transformers,
-and the last accepted CVEs are gone.
-
-- Pins, changed in place: `torch==2.13.0` (CPU index), `sentence-transformers==5.6.0`,
-  `transformers==5.23.0`, `huggingface-hub==2.4.0`. They install with every other pin
-  (checked); `tokenizers` and `safetensors` follow on their own.
-- No code change is needed (checked): `SentenceTransformer('./all-MiniLM-L6-v2')` still
-  loads the local `pytorch_model.bin` offline and scores identical sentences 1.0, the cat
-  paraphrase 0.984 and the stock sentence 0.079; `app/__main__.py` prints
-  `Sentence Transformers: 1.0` for `"a cat" "a cat"`. Don't convert or download the model.
-- Delete `.trivyignore` (its six transformers IDs are fixed) and
-  `tests/test_trivyignore.py`.
-- `tests/test_cli.py`: `subprocess.run([sys.executable, "app/__main__.py", "a cat",
-  "a cat"])` prints a `Sentence Transformers:` line with a value above 0.99; with one
-  argument it exits 1. `tests/test_requirements.py`: add a test that `.trivyignore`
-  doesn't exist.
+Built; see Done.
