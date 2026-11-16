@@ -17,3 +17,20 @@ follows at the same indices.
   (runs `python -m pytest tests/test_requirements.py -v`): exit 0, 7 passed.
 
 **Deviations:** none.
+
+## Phase 2: Delete `.trivyignore` and its test
+
+**Status:** passed
+
+**Files changed:** `.trivyignore` (deleted), `tests/test_trivyignore.py` (deleted),
+`tests/test_requirements.py`
+
+The last accepted IDs (transformers 4.46.3) are fixed by phase 1, so the ignore file and its
+test are gone, and `test_trivyignore_absent` keeps the file from coming back.
+
+**Commands:**
+- `sdlc_stage.py verify --feature 004-dependabot-remediation-piece-4-torch-and --phase 2`
+  (runs `python -m pytest tests/test_requirements.py -v`, `test ! -e .trivyignore`,
+  `test ! -e tests/test_trivyignore.py`): exit 0, 8 passed.
+
+**Deviations:** none.
