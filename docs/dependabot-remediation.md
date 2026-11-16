@@ -22,7 +22,8 @@ never redesign them.
 - **Tests**: pytest, in `tests/`, named `test_<area>.py`, run from the repository
   root. Pages are tested with `streamlit.testing.v1.AppTest`. Tests never use the
   network, a real OpenAI key or a GPU: use fake models and embeddings, and the local
-  model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged.
+  model in `all-MiniLM-L6-v2/`. Earlier pieces' tests pass unchanged, except
+  `EXPECTED` in `tests/test_requirements.py`, which every piece updates to its pins.
 - **Never in scope**: `playground/`, the notebooks, `Gallery/`, `.devcontainer/`,
   `.github/`, and alerts in packages a piece doesn't name.
 
@@ -30,11 +31,12 @@ never redesign them.
 
 Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
-- Open alerts, 94 in 8 packages (current → upgrade to): torch 2.1.0 → 2.13.0 (12,
-  critical); pandasai 0.2.15 (4, critical; 3 have no fixed release); sentence-transformers
-  2.2.2 → 5.6.0 (1, critical); pypdf 3.9.0 → 6.21.4 (68, high); flask 2.0.2 → 3.1.3
-  (2, high); langchain 0.2.11 → 1.3.9 (2, high); langchain-community 0.2.10 → 0.3.27
-  (2, high); streamlit 1.31.1 → 1.54.0 (3, medium).
+- Open alerts after piece 1, 120 in 10 packages (current → upgrade to): torch 2.1.0 →
+  2.13.0 (12, critical); sentence-transformers 2.2.2 → 5.6.0 (1, critical); pypdf 3.9.0
+  → 6.21.4 (68, high); transformers 4.46.3 → 5.10.0 (18, high); werkzeug 2.0.3 → 3.1.9
+  (10, high); flask 2.0.2 → 3.1.3 (2, high); langchain 0.2.11 → 1.3.9 (2, high);
+  langchain-community 0.2.10 → 0.3.27 (2, high); streamlit 1.31.1 → 1.54.0 (3, medium);
+  requests 2.32.3 → 2.33.0 (2, medium).
 - `pandasai`, `playwright` and `pytube` are imported nowhere; `streamlit_app.py` line
   236 mentions PandasAI in a comment. `modules/utils.py` imports `pandas` and `dotenv`,
   which aren't in `requirements.txt`: with the current pins they resolve to
@@ -71,7 +73,14 @@ Read from the code and issue #4 on 2026-11-16. Use these exactly.
 
 ## Done
 
-Nothing yet.
+- **Piece 1** (#13): `tests/` holds the smoke suite, 32 tests: `conftest.py` (repo root on
+  `sys.path`, `OPENAI_API_KEY=sk-test`, removes `embeddings/*.pkl` a test created),
+  `test_requirements.py` (exact ordered pin list in `EXPECTED`: update it with every pin
+  change), `test_conftest.py`, `test_imports.py`, `test_pages.py` (`AppTest`, every page),
+  `test_similarity.py`, `test_flask.py`, `test_embedder.py`. pandasai, playwright and pytube
+  are gone; every line is pinned with `==`. Interim pins a fresh install needs:
+  `pyarrow==25.0.0` (NumPy < 2), `transformers==4.46.3` and `huggingface-hub==0.25.2`
+  (sentence-transformers 2.2.2, torch 2.1), `werkzeug==2.0.3` (Flask 2.0.2).
 
 ## Piece 1: Test baseline and unused packages
 
@@ -99,15 +108,14 @@ The app has a smoke-test suite, and the packages it never imports are gone.
 
 Flask, Streamlit and pypdf are on fixed versions.
 
-- `flask==3.1.3` or later, `streamlit==1.54.0` or later, `pypdf==6.21.4` or later;
-  `streamlit-chat` too if the new Streamlit needs it.
+- `flask==3.1.3` or later, `streamlit==1.54.0` or later, `pypdf==6.21.4` or later,
+  `werkzeug==3.1.9` or later, `requests==2.33.0` or later; `streamlit-chat` too if the
+  new Streamlit needs it. `pyarrow` may then move to the newest release.
 - If the pinned `st-pages` doesn't work with the new Streamlit, remove it: in
   `streamlit_app.py` build the menu with `st.navigation` from `st.Page` entries with
   the same paths, titles and icons as the `show_pages` list, `download.py` and
   `refresh.py` left out of the menu; delete every `hide_pages` call and import.
-- Pin `werkzeug` to the version the new Flask needs (or remove the pin if Flask's own
-  requirement suffices), and delete the two Werkzeug IDs and their comment from
-  `.trivyignore`.
+- Delete the two Werkzeug IDs and their comment from `.trivyignore`.
 - Fix only what else the upgrades break (`flask_app.py`, `modules/history.py`).
 - `tests/test_pdf.py`: `PyPDFLoader` loads each sample PDF with at least one page
   of non-empty text.
@@ -138,8 +146,7 @@ LangChain is on fixed versions and the `openai==0.27.7` client is gone.
 Similarity scoring runs on fixed versions of torch and sentence-transformers.
 
 - `torch==2.13.0` or later (from the CPU index), `sentence-transformers==5.6.0` or
-  later; `transformers` and `huggingface-hub` at versions they accept with no open
-  HIGH CVE. Delete the six transformers IDs and their comment from `.trivyignore`.
+  later; `transformers==5.10.0` or later and `huggingface-hub` at a version they accept. Delete the six transformers IDs and their comment from `.trivyignore`.
 - Loading must stay local: `SentenceTransformer('./all-MiniLM-L6-v2')`, no download.
   If the new versions refuse `pytorch_model.bin`, add a `model.safetensors` converted
   from it, delete the `.bin`, and say so in the build log.
